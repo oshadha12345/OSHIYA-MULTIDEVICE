@@ -57,36 +57,33 @@ cmd(
         }
       }
 
-      let madeMenu = `💐 *Hello  ${pushname}*
+      let madeMenu = `💐 *𝙃𝙀𝙇𝙇𝙊  ${pushname}*
 
-
+▬▬▬▬▬▬▬▬▬▬▬▬▬
 | *MAIN COMMANDS* |
-    ▫️.alive
-    ▫️.menu
-    ▫️.ai <text>
-    ▫️.system
-    ▫️.owner
+    🚀.alive
+    🚀.menu
+    🚀.ai <text>
+    🚀.system
+    🚀.owner
 | *DOWNLOAD COMMANDS* |
-    ▫️.song <text>
-    ▫️.video <text>
-    ▫️.fb <link>
+    🚀.song <text>
+    🚀.video <text>
+    🚀.fb <link>
 | *GROUP COMMANDS* |
 ${menu.group}
 | *OWNER COMMANDS* |
-    ▫️.restart
-    ▫️.update
+    🚀.restart
+    🚀.update
 | *CONVERT COMMANDS* |
-    ▫️.sticker <reply img>
-    ▫️.img <reply sticker>
-    ▫️.tr <lang><text>
-    ▫️.tts <text>
+    🚀.sticker <reply img>
+    🚀.img <reply sticker>
+    🚀.tr <lang><text>
+    🚀.tts <text>
 | *SEARCH COMMANDS* |
 ${menu.search}
-
-
+▬▬▬▬▬▬▬▬▬▬▬▬▬
 > *@𝙾𝚂𝙷𝙰𝙳𝙷𝙰 𝙼𝙰𝙽𝚄𝙿𝙿𝚁𝙸𝚈𝙰*
-
-> OSHIYA MENU MSG
 `;
       await robin.sendMessage(
         from,
