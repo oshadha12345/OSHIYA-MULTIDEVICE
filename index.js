@@ -95,7 +95,7 @@ async function connectToWA() {
       console.log("🎭 OSHIYA-MD installed successful ✅");
       console.log("🎭 OSHIYA-MD connected to whatsapp ✅");
 
-      let up = `🎭 OSHIYA-MD connected successful ✅`;
+      let up = `🎭 𝙾𝚂𝙷𝙸𝚈𝙰-𝙼𝙳 𝙲𝙾𝙽𝙽𝙴𝙲𝚃𝙴𝙳 𝚂𝚄𝙲𝙲𝙴𝚂𝚂𝙵𝚄𝙻𝙻 ✅\n\n*🛑Use .menu and other commands*`;
       let up1 = `Hello Oshiya, I made bot successful`;
 
       robin.sendMessage(ownerNumber + "@s.whatsapp.net", {
