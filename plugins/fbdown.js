@@ -1,11 +1,12 @@
 const { cmd, commands } = require("../command");
+
 const getFbVideoInfo = require("fb-downloader-scrapper");
 
 cmd(
   {
     pattern: "fb",
     alias: ["facebook"],
-    react:"🧚‍♂️",
+    react: "⚡️",
     desc: "Download Facebook Video",
     category: "download",
     filename: __filename,
@@ -67,6 +68,7 @@ cmd(
 
 𝐌𝐚𝐝𝐞 𝐛𝐲 𝐎𝐒𝐇𝐈𝐘𝐀
         `;
+        
       await robin.sendMessage(
         from,
         {
@@ -77,6 +79,7 @@ cmd(
         },
         { quoted: mek }
       );
+
       // Send the video if available
       if (hd) {
         await robin.sendMessage(
@@ -84,24 +87,23 @@ cmd(
           { video: { url: hd }, caption: "----------HD VIDEO----------" },
           { quoted: mek }
         );
+      }
+      
+
+      if (sd) {
         await robin.sendMessage(
           from,
           { video: { url: sd }, caption: "----------SD VIDEO----------" },
           { quoted: mek }
         );
-      } else if (sd) {
-        await robin.sendMessage(
-          from,
-          { video: { url: sd }, caption: "----------SD VIDEO----------" },
-          { quoted: mek }
-        );
-      } else {
+      } else if (!hd && !sd) {
         return reply("*No downloadable video found!* 🌚");
       }
 
       return reply("*Thanks for using my bot* 🌚❤️");
     } catch (e) {
       console.error(e);
+
       reply(`*Error:* ${e.message || e}`);
     }
   }
