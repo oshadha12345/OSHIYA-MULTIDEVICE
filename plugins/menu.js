@@ -57,7 +57,7 @@ cmd(
         }
       }
 
-      let madeMenu = `💐 *𝙃𝙀𝙇𝙇𝙊  ${pushname}*
+      let madeMenu = `💐 ▏*𝙃𝙀𝙇𝙇𝙊  ${pushname}*▏
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬
 | *MAIN COMMANDS* |
