@@ -1,40 +1,69 @@
-const config = require('../config'); 
-const { cmd, commands } = require("../command");
 const { readEnv } = require("../lib/database");
+const { cmd, commands } = require("../command");
 
 cmd(
   {
     pattern: "menu",
-    alias: ["getmenu"],
     react: "📂",
+    alise: ["getmenu"],
     desc: "get cmd list",
     category: "main",
     filename: __filename,
   },
-  async (robin, mek, m, { from, reply }) => {
+  async (
+    robin,
+    mek,
+    m,
+    {
+      from,
+      quoted,
+      body,
+      isCmd,
+      command,
+      args,
+      q,
+      isGroup,
+      sender,
+      senderNumber,
+      botNumber2,
+      botNumber,
+      pushname,
+      isMe,
+      isOwner,
+      groupMetadata,
+      groupName,
+      participants,
+      groupAdmins,
+      isBotAdmins,
+      isAdmins,
+      reply,
+    }
+  ) => {
     try {
-            const ownerName = config.OWNER_NAME || "OSHIYA";
-      const botName = config.BOT_NAME || "OSHIYA-MD";
-      
-     
-      const dbConfig = await readEnv();
-      const mode = dbConfig.MODE || config.MODE || "Public";
-      const finalPrefix = dbConfig.PREFIX || config.PREFIX || ".";
-      const totalCommands = commands.length;
+      const config = await readEnv();
+      let menu = {
+        main: "",
+        download: "",
+        group: "",
+        owner: "",
+        convert: "",
+        search: "",
+      };
 
-      let madeMenu = `
+      for (let i = 0; i < commands.length; i++) {
+        if (commands[i].pattern && !commands[i].dontAddCommandList) {
+          menu[
+            commands[i].category
+          ] += `${config.PREFIX}${commands[i].pattern}\n`;
+        }
+      }
+
+      let madeMenu = `🔥 *Hey  ${pushname}*
+
+
 
 ╔═════ＯＳＨＩＹ- ＭＤ═══════════╮
 ║
-║╞  👑 𝙾𝚆𝙽𝙴𝚁 : ${pushname}
-║
-║╞  ⚙ 𝙼𝙾𝙳𝙴 :  ${mode}
-║
-║╞  🔣 𝙿𝚁𝙴𝙵𝙸𝚇 : ${finalPrefix}
-║
-║╞ 📚 𝙲𝙾𝙼𝙼𝙰𝙽𝙳𝚂 : ${totalCommands}
-║
-╠═══════════════════╮
 ║       𝐌𝐀𝐈𝐍  𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒 ⚠️   
 ║                                                      
 ║╞ 🛡️ .𝚊𝚕𝚒𝚟𝚎
@@ -82,7 +111,6 @@ cmd(
 ╚═══════════════════════════╯
 
 `;
-
       await robin.sendMessage(
         from,
         {
@@ -93,10 +121,9 @@ cmd(
         },
         { quoted: mek }
       );
-
     } catch (e) {
       console.log(e);
-      reply(`❌ Error: ${e.message}`);
+      reply(`${e}`);
     }
   }
 );
