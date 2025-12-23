@@ -103,9 +103,6 @@ cmd(
 ║   𝐎𝐓𝐇𝐄𝐑 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒 📚
 ╚═════════════════╯
 `;
-      await robin.sendPresenceUpdate('recording', from);
-      await robin.sendMessage(from, { audio: { url: "https://github.com/oshadha12345/images/raw/refs/heads/main/Voice/Bully%20Maguire%20edit%20%F0%9F%97%BF_%20Parano%20(Slowed)%20_(MP3_160K).mp3" }, mimetype: 'audio/mpeg', ptt: true }, { quoted: mek });
-      
       await robin.sendMessage(
         from,
         {
