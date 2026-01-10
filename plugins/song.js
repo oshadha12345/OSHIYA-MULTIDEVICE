@@ -1,29 +1,31 @@
-const { cmd } = require("../command");
-const ytdl = require('ytdl-core');
-const { yts } = require('yt-search');
+const { cmd } = require('../command');
+const config = require('../config');
 
-module.exports = {
-  name: 'song',
-  react: "😎",
-  description: 'Download song from YouTube',
-  async execute(m, { args, sendAudio }) {
-    const query = args.join(' ');
-    if (!query) return m.reply('🎧 ගීතයේ නමක් හෝ YouTube link එකක් දෙන්න.');
+const fg = require('api-downloader') // උඹේ බොට් එකේ පාවිච්චි වෙන API එක අනුව මේක වෙනස් වෙන්න පුළුවන්
 
-    let url = '';
-    if (query.startsWith('http')) {
-      url = query;
-    } else {
-      const res = await yts(query);
-      url = res.all[0].url;
-    }
+cmd({
+    pattern: "song",
+    desc: "Download songs easily.",
+    category: "download",
+    filename: __filename
+},
+async(conn, mek, m, { from, q, reply }) => {
+try {
+    if (!q) return reply("අනේ මචං, සින්දුවේ නම හරි Link එක හරි දියන්කෝ! 🎵")
 
-    const info = await ytdl.getInfo(url);
-    const title = info.videoDetails.title;
+    await reply("Searching for your song... 🔎")
+    
+    // මෙතනින් තමයි සින්දුව හොයලා බාන්නේ
+    // උදාහරණයක් විදිහට:
+    // let data = await fg.ytmp3(q) 
+    
+    return await conn.sendMessage(from, { 
+        audio: { url: 'ඔයාගේ_API_එකෙන්_එන_link_එක' }, 
+        mimetype: 'audio/mp4' 
+    }, { quoted: mek })
 
-    m.reply(`⬇️ ගීතය බාගත වෙමින් පවතී: *${title}*`);
-    const stream = ytdl(url, { filter: 'audioonly' });
-
-    return await sendAudio(m.chat, stream, title + '.mp3', m);
-  }
-};
+} catch (e) {
+    console.log(e)
+    reply(`වැඩේ ගැස්සුණා බං: ${e}`)
+}
+})
