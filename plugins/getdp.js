@@ -2,6 +2,7 @@ const { cmd } = require('../command')
 
 cmd({
     pattern: "getdp",
+    react: "👻",
     desc: "Download user's Profile Picture",
     category: "main",
     filename: __filename
