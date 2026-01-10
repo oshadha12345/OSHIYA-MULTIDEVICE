@@ -1,8 +1,10 @@
+const { cmd } = require("../command");
 const ytdl = require('ytdl-core');
 const { yts } = require('yt-search');
 
 module.exports = {
   name: 'song',
+  react: "😎",
   description: 'Download song from YouTube',
   async execute(m, { args, sendAudio }) {
     const query = args.join(' ');
