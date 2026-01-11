@@ -2,6 +2,7 @@ const { cmd } = require('../command')
 
 cmd({
     pattern: "help",
+    react: "☎",
     desc: "Get owner information and contact link.",
     category: "main",
     filename: __filename
