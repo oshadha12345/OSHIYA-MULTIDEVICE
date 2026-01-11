@@ -1,16 +1,18 @@
 const { cmd } = require('../command')
 
-// රියැක්ට් එක ඔන් ද ඕෆ් ද කියලා මතක තියාගන්න variable එකක්
+// Default එක ඕෆ් කරලා තියෙන්නේ
 let autoReact = false
 
-// මැසේජ් එකක් එනකොටම චෙක් කරන කෑල්ල
+// මැසේජ් එකක් ආපු ගමන් චෙක් කරන කෑල්ල
 cmd({
     on: "body"
 },
-async (conn, mek, m, { from, body, isGroup }) => {
+async (conn, mek, m, { from, body, isMe }) => {
     if (autoReact && !m.isBaileys) {
-        const emojis = ['❤️', '🔥', '✨', '💎', '🦾', '🚀', '⭐','❄','🏹']
-        const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)]
+        // ලෝකේ තියෙන ඔක්කොම වගේ emojis සෙට් එකක්
+        const allEmojis = ['❤️','🔥','✨','💎','🦾','🚀','⭐','😂','😍','👑','⚡','💯','🎈','🎉','🎭','🧿','🧸','🧿','🌈','🍎','🍕','🎸','🎮','🛸','📱','💻']
+        const randomEmoji = allEmojis[Math.floor(Math.random() * allEmojis.length)]
+        
         await conn.sendMessage(from, {
             react: {
                 text: randomEmoji,
@@ -20,20 +22,23 @@ async (conn, mek, m, { from, body, isGroup }) => {
     }
 })
 
-// ON කරන්න කමාන්ඩ් එක
+// ON/OFF කරන කමාන්ඩ් එක (Owner Only)
 cmd({
     pattern: "react",
-    desc: "Turn Auto React on or off",
+    desc: "Turn Auto React on or off (Owner Only)",
     category: "owner",
     filename: __filename
 },
-async (conn, mek, m, { from, q, reply }) => {
+async (conn, mek, m, { from, q, reply, isOwner }) => {
+    // බොට් අයිති එකාට විතරයි මේක කරන්න පුළුවන්
+    if (!isOwner) return reply("සොරි මචං, මේක කරන්න බොට්ගේ අයිතිකාරයා (Owner) වෙන්නම ඕනේ! 🚫")
+
     if (q === "on") {
         autoReact = true
-        return reply("Auto React Enabled! ✅")
+        return reply("Auto React Enabled! ✅ දැන් හැම මැසේජ් එකකටම Emoji වැටෙයි.")
     } else if (q === "off") {
         autoReact = false
-        return reply("Auto React Disabled! ❌")
+        return reply("Auto React Disabled! ❌ වැඩේ නැවැත්තුවා.")
     } else {
         return reply("පාවිච්චි කරන විදිහ: \n.react on - ඔන් කරන්න \n.react off - ඕෆ් කරන්න")
     }
