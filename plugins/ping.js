@@ -4,45 +4,41 @@ const { runtime } = require('../lib/functions');
 
 cmd({
     pattern: "ping",
-    react: "🔥",
-    desc: "Check speed with interactive menu link.",
+    react: "📶",
+    desc: "Check the bot's super fast speed.",
     category: "main",
     filename: __filename
 },
-async (conn, mek, m, { from, reply, prefix }) => {
+async (conn, mek, m, { from, reply }) => {
     try {
         const startTime = Date.now()
-        const msg = await conn.sendMessage(from, { text: '🚀 *Processing...*' })
+        const msg = await conn.sendMessage(from, { text: '🚀 *Measuring Speed...*' })
         const endTime = Date.now()
-        const ping = endTime - startTime
+        const latency = endTime - startTime
 
-        const responseText = `⚡ *OSHIYA MD SPEED METER* ⚡
+        // RAM එක බලාගන්න
+        const totalMem = (os.totalmem() / 1024 / 1024 / 1024).toFixed(2)
+        const freeMem = (os.freemem() / 1024 / 1024 / 1024).toFixed(2)
 
-🛰️ *Latency:* ${ping}ms
-📊 *Status:* Super Fast 🦾
+        const pingStatus = latency < 200 ? "🚀 EXTREMELY FAST" : latency < 500 ? "⚡ STABLE" : "🐢 SLOW"
+
+        const responseText = `⚡ *OSHIYA MD PING METER* ⚡
+
+🛰️ *Latency:* ${latency}ms
+📊 *Status:* ${pingStatus}
+
+💻 *System Info:*
+- RAM: ${totalMem}GB
+- Free: ${freeMem}GB
+- Platform: ${os.platform()}
 
 👤 *Owner:* Oshadha Manuppriya
+✨ *Mode:* Super Fast 🦾`
 
-*Click the button below to see all commands!* 👇`
-
-        // Button එකක් විදිහට යවමු (WhatsApp UI Buttons)
-        const buttons = [
-            { buttonId: `${prefix}menu`, buttonText: { displayText: '📜 MAIN MENU' }, type: 1 }
-        ]
-
-        const buttonMessage = {
-            text: responseText,
-            footer: 'Created by Oshiya-MD',
-            buttons: buttons,
-            headerType: 1
-        }
-
-        await conn.sendMessage(from, buttonMessage, { quoted: mek })
-        // කලින් යවපු Processing මැසේජ් එක මකනවා
-        await conn.sendMessage(from, { delete: msg.key })
+        await conn.sendMessage(from, { text: responseText, edit: msg.key })
 
     } catch (e) {
         console.log(e)
-        reply("Ping බලද්දී පොඩි අවුලක් වුණා මචං! ❌")
+        reply("Ping එක බලන්න ගිහින් පොඩි අවුලක් වුණා! ❌")
     }
 })
