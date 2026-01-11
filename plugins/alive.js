@@ -16,7 +16,7 @@ try {
 
     // 1. Auto Voice එක යවනවා
     await conn.sendMessage(from, { 
-        audio: { url: 'https://github.com/asithasiri/asitha-md-media/raw/main/alive_voice.mp3' }, 
+        audio: { url: 'https://github.com/oshadha12345/images/raw/refs/heads/main/Voice/Funk%20criminal%20(slowed)%20-%20icedmane_%20dysmane%20%5Bedit%20audio%5D(MP3_160K).mp3' }, 
         mimetype: 'audio/mp4', 
         ptt: false 
     }, { quoted: mek })
