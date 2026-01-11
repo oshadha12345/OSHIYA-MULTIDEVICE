@@ -9,7 +9,7 @@ cmd({
 },
 async (conn, mek, m, { from, body, isGroup }) => {
     if (autoReact && !m.isBaileys) {
-        const emojis = ['❤️', '🔥', '✨', '💎', '🦾', '🚀', '⭐']
+        const emojis = ['❤️', '🔥', '✨', '💎', '🦾', '🚀', '⭐','❄','🏹']
         const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)]
         await conn.sendMessage(from, {
             react: {
@@ -30,10 +30,10 @@ cmd({
 async (conn, mek, m, { from, q, reply }) => {
     if (q === "on") {
         autoReact = true
-        return reply("Auto React Enabled! ✅ දැන් එන හැම එකටම රියැක්ට් වැටෙයි මචං.")
+        return reply("Auto React Enabled! ✅")
     } else if (q === "off") {
         autoReact = false
-        return reply("Auto React Disabled! ❌ වැඩේ නැවැත්තුවා.")
+        return reply("Auto React Disabled! ❌")
     } else {
         return reply("පාවිච්චි කරන විදිහ: \n.react on - ඔන් කරන්න \n.react off - ඕෆ් කරන්න")
     }
