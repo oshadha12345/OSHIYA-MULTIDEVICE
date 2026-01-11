@@ -12,12 +12,12 @@ cmd({
 async(conn, mek, m, { from, reply }) => {
 try {
     const startTime = Date.now()
-    const msg = await reply("*Checking Speed*... 🚀")
+    const msg = await reply("*Checking bot Speed*... 🚀")
     const endTime = Date.now()
     const ping = endTime - startTime
 
     await conn.sendMessage(from, { 
-        text: `*🚀 OSHIYA MD SPEED:* ${ping}ms` 
+        text: `*🚀 OSHIYA-MD SPEED:* ${ping}ms` 
     }, { quoted: msg })
 
 } catch (e) {
