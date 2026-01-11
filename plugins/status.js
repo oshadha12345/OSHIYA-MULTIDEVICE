@@ -1,5 +1,4 @@
 const { cmd } = require('../command');
-const config = require('../config');
 
 // මේවා config වලට හරි global variables වලට හරි දාගනින්
 let statusAutoRead = false
