@@ -13,7 +13,7 @@ module.exports = {
       const result = await ytdl(text);
       const { title, audio, thumbnail } = result;
 
-      await conn.sendMessage(m.chat, { image: { url: thumbnail }, caption: `🎶 *Title:* title` );
+      await conn.sendMessage(m.chat, { image: { url: thumbnail }, caption: `🎶 *Title:* ${title}` );
       await conn.sendMessage(m.chat, 
         audio:  url: audio.url ,
         mimetype: 'audio/mp4',
