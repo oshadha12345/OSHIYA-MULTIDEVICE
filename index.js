@@ -88,7 +88,21 @@ async function connectToWA() {
       });
       console.log("🎭 OSHIYA-MD installed successful ✅");
       console.log("🎭 OSHIYA-MD connected to whatsapp ✅");
-
+      
+// බොට් සාර්ථකව Connect වුණාට පස්සේ About එක Update කරන කෝඩ් එක
+conn.ev.on('connection.update', async (update) => {
+    const { connection } = update
+    if (connection === 'open') {
+        
+        console.log("OSHIYA-MD සාර්ථකව Connect වුණා! 🚀")
+        
+        // මෙන්න මෙතනින් තමයි About එක වෙනස් කරන්නේ
+        await conn.updateProfileStatus("OSHIYA-MD 🦾 | Developed by Oshadha Manuppriya")
+            .then(() => console.log("About එක සාර්ථකව Update කළා! ✅"))
+            .catch((err) => console.log("About Update Error: ", err))
+    }
+})
+  
       let up = `👨‍💻 *OSHIYA-MD MULTIDEVICE BOT* 👨‍💻\n🛡️ 𝐁𝐨𝐭 𝐂𝐨𝐧𝐧𝐞𝐜𝐭𝐞𝐝 𝐬𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲\n🛡️ 𝐔𝐬𝐞 𝐌𝐞𝐧𝐮 𝐀𝐧𝐝 𝐎𝐭𝐡𝐞𝐫 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬 🛡️\n🌹 ᴛʜᴀɴᴋ ʏᴏᴜ 🌹\n> *@ ᴏꜱʜᴀᴅʜᴀ ᴍᴀɴᴜᴘᴘʀɪʏᴀ* 👑`;
       let up1 = `╭───────❖🌀❖───────╮
    ✨  *I MADE OSHIYA MD*  ✨
