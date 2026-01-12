@@ -42,7 +42,7 @@ try {
 
     // Image එකත් එක්ක Menu එක යවනවා
     return await conn.sendMessage(from, {
-        image: { url: 'https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/bot_menu.png' }, // මෙතනට උඹේ කැමති image link එකක් දාපන්
+        image: { url: 'https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiya_md.png' }, // මෙතනට උඹේ කැමති image link එකක් දාපන්
         caption: menuMsg
     }, { quoted: mek })
 
