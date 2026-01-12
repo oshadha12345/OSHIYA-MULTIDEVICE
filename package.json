@@ -43,7 +43,6 @@
     "vm": "^0.1.0",
     "yt-search": "^2.13.1",
     "fb-downloader-scrapper": "^3.0.1",
-    "wikijs": "^6.4.1",
-    "ytdl-core": "^4.11.5",
+    "wikijs": "^6.4.1"
   }
 }
