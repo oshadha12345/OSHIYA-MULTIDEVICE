@@ -31,6 +31,7 @@ try {
 │   ├ .alive
 │   ├ .menu
 │   ├ .ping
+│   ├ .boom <9475xxxxxxx> Oshiya
 │   ├ .help
 │   ├ .getdp 
 │   ├ .wiki 
