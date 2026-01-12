@@ -21,27 +21,24 @@ try {
         ptt: false 
     }, { quoted: mek })
 
-    let menuMsg = `👨‍💻*OSHIYA MD MULTI-DEVICE*👨‍💻
-
-👋 *Hey:* ${pushname}
-📅 *Today:* ${day}
-📆 *Date:* ${date}
-
-*🔻── 🌀CATEGORIES🌀 ──🔻*
-
-📥 *DOWNLOADER*
-   .fb, .tiktok, .song, .video, .getdp
-
-🎨 *GRAPHICS*
-   .genimg, .sticker
-
-🛠️ *TOOLS*
-   .wiki, .weather, .ping,.help
-
-⚙️ *SETTINGS*
-   .react on/off,read on/off
-
-*🎭 Powered by Oshiya Md 🎭*`
+    let menuMsg = `╭──「 *👨‍💻 OSHIYA MD 👨‍💻* 」─⭓
+│ 
+├ 📅 *Today:* ${day}
+├ 📆 *Date:* ${date}
+├ 👤 *User:* ${pushname}
+│
+├ 🛠️ Commands:
+│   ├ .alive
+│   ├ .menu
+│   ├ .ping
+│   ├ .help
+│   ├ .getdp 
+│   ├ .wiki 
+│   ├ .react on/off
+│   ├ .read on/off
+│
+│   🎭*OSHIYA MD*🎭
+╰───────⭓`
 
     // Image එකත් එක්ක Menu එක යවනවා
     return await conn.sendMessage(from, {
