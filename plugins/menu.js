@@ -21,7 +21,7 @@ try {
         ptt: false 
     }, { quoted: mek })
 
-    let menuMsg = `╭──「 *👨‍💻 OSHIYA MD 👨‍💻* 」─⭓
+    let menuMsg = `╭─「 *👨‍💻 OSHIYA MD 👨‍💻* 」─⭓
 │ 
 ├ 📅 *Today:* ${day}
 ├ 📆 *Date:* ${date}
