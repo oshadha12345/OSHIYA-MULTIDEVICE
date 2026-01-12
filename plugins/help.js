@@ -11,11 +11,10 @@ async(conn, mek, m, { from, reply }) => {
 try {
     const ownerName = "Oshadha Manuppriya"
     const ownerNumber = "94756599952" 
-    const voiceUrl = "https://github.com/oshadha12345/images/raw/refs/heads/main/Voice/Coolzone%20(nasty_)%20-%20impxstr%20%5Bedit%20audio%20like%20_fictic_editz%20%5D(MP3_160K).mp3" 
 
     // 1. මුලින්ම Auto Voice Note එක යවනවා
     await conn.sendMessage(from, { 
-        audio: { url: voiceUrl }, 
+        audio: { url: 'https://github.com/oshadha12345/images/raw/refs/heads/main/Voice/Coolzone%20(nasty_)%20-%20impxstr%20%5Bedit%20audio%20like%20_fictic_editz%20%5D(MP3_160K).mp3' }, 
         mimetype: 'audio/mp4', 
         ptt: false 
     }, { quoted: mek })
