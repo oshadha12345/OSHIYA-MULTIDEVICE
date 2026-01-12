@@ -21,13 +21,13 @@ try {
         ptt: false 
     }, { quoted: mek })
 
-    let menuMsg = `✨ *OSHIYA MD MULTI-DEVICE* ✨
+    let menuMsg = `👨‍💻*OSHIYA MD MULTI-DEVICE*👨‍💻
 
-👋 *Hello:* ${pushname}
+👋 *Hey:* ${pushname}
 📅 *Today:* ${day}
 📆 *Date:* ${date}
 
-*─── CATEGORIES ───*
+*🔻── 🌀CATEGORIES🌀 ──🔻*
 
 📥 *DOWNLOADER*
    .fb, .tiktok, .song, .video, .getdp
@@ -36,12 +36,12 @@ try {
    .genimg, .sticker
 
 🛠️ *TOOLS*
-   .wiki, .weather, .ping
+   .wiki, .weather, .ping,.help
 
 ⚙️ *SETTINGS*
    .react on/off,read on/off
 
-*Powered by Oshiya Md*`
+*🎭 Powered by Oshiya Md 🎭*`
 
     // Image එකත් එක්ක Menu එක යවනවා
     return await conn.sendMessage(from, {
