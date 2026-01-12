@@ -100,7 +100,7 @@ async function connectToWA() {
       });
       robin.sendMessage("94725364886@s.whatsapp.net", {
         image: {
-          url: `https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/20251223_061012.jpg`,
+          url: `https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiyaping.jpg`,
         },
         caption: up1,
       });
