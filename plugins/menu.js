@@ -35,6 +35,10 @@ try {
 │   ├ .help
 │   ├ .getdp 
 │   ├ .wiki 
+│   ├ .song
+│   ├ .video
+│   ├ .tiktok
+│   ├ .movie
 │   ├ .react on/off
 │   ├ .read on/off
 │
