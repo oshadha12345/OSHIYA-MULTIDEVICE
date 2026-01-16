@@ -55,7 +55,7 @@ const port = process.env.PORT || 8000;
 async function connectToWA() {
   //===========================
 
-  console.log("Connecting 🎭 OSHIYA-MD");
+  console.log("Connecting ✅ OSHIYA-MD");
   const { state, saveCreds } = await useMultiFileAuthState(
     __dirname + "/auth_info_baileys/"
   );
@@ -86,9 +86,9 @@ async function connectToWA() {
           require("./plugins/" + plugin);
         }
       });
-      console.log("🎭 OSHIYA-MD installed successful ✅");
-      console.log("🎭 OSHIYA-MD connected to whatsapp ✅");  
-      let up = `👨‍💻 *OSHIYA-MD MULTIDEVICE BOT* 👨‍💻\n🛡️ 𝐁𝐨𝐭 𝐂𝐨𝐧𝐧𝐞𝐜𝐭𝐞𝐝 𝐬𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲\n🛡️ 𝐔𝐬𝐞 𝐌𝐞𝐧𝐮 𝐀𝐧𝐝 𝐎𝐭𝐡𝐞𝐫 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬 🛡️\n🌹 ᴛʜᴀɴᴋ ʏᴏᴜ 🌹\n> *@ ᴏꜱʜᴀᴅʜᴀ ᴍᴀɴᴜᴘᴘʀɪʏᴀ* 👑`;
+      console.log("✅ OSHIYA-MD installed successful ✅");
+      console.log("✅ OSHIYA-MD connected to whatsapp ✅");  
+      let up = `👨‍💻 *OSHIYA-MD MULTIDEVICE BOT* 👨‍💻\n🛡️ 𝐁𝐨𝐭 𝐂𝐨𝐧𝐧𝐞𝐜𝐭𝐞𝐝 𝐬𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲\n🛡️ 𝐔𝐬𝐞 𝐌𝐞𝐧𝐮 𝐀𝐧𝐝 𝐎𝐭𝐡𝐞𝐫 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬 🛡️\n🧬 𝚆𝚊𝚒𝚝 5 𝚖𝚒𝚗𝚞𝚝𝚎𝚜 𝚏𝚘𝚛 𝚒𝚝 𝚝𝚘 𝚠𝚘𝚛𝚔 𝚝𝚘 𝚑𝚒𝚐𝚑𝚝 𝚜𝚙𝚎𝚎𝚍 🧬\n> *@Oshiya Official* 👑`;
       let up1 = `╭───────❖🌀❖───────╮
    ✨  *I MADE OSHIYA MD*  ✨
 
