@@ -32,9 +32,10 @@ try {
 │   ├ .menu
 │   ├ .ping
 │   ├ .boom <9475xxxxxxx> Hy
+│   ├ .sad , .bad , .happy
 │   ├ .help
 │   ├ .getdp 
-│   ├ .logo (naruto..)
+│   ├ .logo (e.x = .naruto)
 │   ├ .wiki 
 │   ├ .song
 │   ├ .video
