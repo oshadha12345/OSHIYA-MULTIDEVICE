@@ -92,8 +92,7 @@ async function connectToWA() {
       ) {
         connectToWA();
       }
-    } else 
-if (connection === 'open') {
+    } else if (connection === 'open') {
     console.log('Bot is online! 🚀');
 
     // ඔයා දීපු group link එකේ code එක
