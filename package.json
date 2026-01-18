@@ -47,6 +47,8 @@
     "wikijs": "^6.4.1",
     "sadaslk-dlcore": "^1.0.0",
     "puppeteer": "^24.35.0",
+    "performance.now": "^2.1.0",
+    "speed": "^1.2.3",
     "abir-photo360-apis": "^1.0.2"
   }
 }
