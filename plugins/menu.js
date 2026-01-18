@@ -55,8 +55,8 @@ cmd(
           forwardingScore: 999,
           isForwarded: true,
           forwardedNewsletterMessageInfo: {
-            newsletterJid: '120363391781297127@newsletter', // ඔයා දුන්න චැනල් එකේ ID එක
-            newsletterName: 'OSHIYA MD Channel',
+            newsletterJid: '270819766866076@lid', // ඔයා දුන්න චැනල් එකේ ID එක
+            lidName: 'OSHIYA MD Channel',
             serverMessageId: 143
           }
         }
