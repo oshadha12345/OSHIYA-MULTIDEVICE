@@ -33,10 +33,11 @@ cmd(
       // 2. Stylish ━ Menu Design
       let menuText = `━❮❮ 『 *OSHIYA MD* 』 ❯❯━\n`;
       menuText += `┃ 👤 *User:* ${pushname}\n`;
-      menuText += `┃ 👨‍💻 *Owner:* ${config.OWNER_NUM}\n`;
+      menuText += `┃ 👨‍💻 *Owner:* ${config.OWNER_NAME}\n`;
       menuText += `┃ 🗓️ *Date:* ${date}\n`;
       menuText += `┃ ⌚ *Time:* ${time}\n`;
       menuText += `┃ 🧬 *Version:* ${pkg.version}\n`;
+      menuText += `┃ 🛡️ *MODE:* ${config.MODE}\n`;
       menuText += `━❮❮ 『 *COMMAND LIST* 』 ❯❯━\n\n`;
 
       for (const [cat, cmds] of Object.entries(categories)) {
