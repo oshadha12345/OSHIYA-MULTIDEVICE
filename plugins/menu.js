@@ -33,7 +33,7 @@ cmd(
       // 2. Stylish ━ Menu Design
       let menuText = `━❮❮ 『 *OSHIYA MD* 』 ❯❯━\n`;
       menuText += `┃ 👤 *User:* ${pushname}\n`;
-      menuText += `┃ 👨‍💻 *Owner:* ${config.OWNER_NUMBER || 'Not Set'}\n`;
+      menuText += `┃ 👨‍💻 *Owner:* ${config.OWNER_NUM}\n`;
       menuText += `┃ 🗓️ *Date:* ${date}\n`;
       menuText += `┃ ⌚ *Time:* ${time}\n`;
       menuText += `┃ 🧬 *Version:* ${pkg.version}\n`;
