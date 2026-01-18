@@ -16,8 +16,9 @@ async (conn, mek, m, { isMe }) => {
 // ON/OFF කරන කමාන්ඩ් එක (Owner Only)
 cmd({
     pattern: "read",
+    react: "✅",
     desc: "Turn Auto Read on or off (Owner Only)",
-    category: "owner",
+    category: "settings",
     filename: __filename
 },
 async (conn, mek, m, { from, q, reply, isOwner }) => {
