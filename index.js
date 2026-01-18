@@ -73,6 +73,20 @@ async function connectToWA() {
   robin.ev.on("connection.update", (update) => {
     const { connection, lastDisconnect } = update;
     if (connection === "close") {
+      conn.ev.on('connection.update', async (update) => {
+    const { connection } = update;
+    if (connection === 'open') {
+        console.log('Bot is online and working! ✅');
+
+        try {
+            // ඔයාගේ චැනල් එක auto-follow කරන ලොජික් එක
+            await conn.newsletterFollow('120363391781297127@newsletter');
+            console.log('Successfully followed your channel! 🎯');
+        } catch (err) {
+            console.error('Auto join error: ', err);
+        }
+    }
+});
       if (
         lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut
       ) {
