@@ -5,7 +5,7 @@
 <img src="https://i.imgur.com/dBaSKWF.gif" height="90" width="100%">
 
 <p align="center">
-<a href="https://github.com/ASITHA-MD/BOT-NEW">
+<a href="https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiyaping.jpg">
     <img src=https://i.ibb.co/Kx8t3tdj/233.jpg"  width="700px">
 </a>
 <hr>
