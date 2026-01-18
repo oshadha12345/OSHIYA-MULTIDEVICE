@@ -35,5 +35,5 @@ jobs:
 👇👇 WebPair Link Repo 👇👇
 
 Copy Code 📋</button>
-  <pre><code id="workflowCode">name: https://github.com/oshadha12345/Oshiya-md-bot-session</code></pre>
+  <pre><code id="workflowCode"> https://github.com/oshadha12345/Oshiya-md-bot-session</code></pre>
 </div>
