@@ -32,13 +32,3 @@ jobs:
       run: npm start</code></pre>
 </div>
 
-<script>
-  function copyCode() {
-    var code = document.getElementById("workflowCode").innerText;
-    navigator.clipboard.writeText(code);
-    alert("Code Copied to Clipboard! 🚀");
-  }
-</script>
-
-</body>
-</html>
