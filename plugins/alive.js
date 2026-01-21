@@ -18,20 +18,22 @@ async (danuwa, mek, m, {
     groupAdmins, isBotAdmins, isAdmins, reply
 }) => {
     try {
-        // Create buttons using gifted-btns
-        const buttons = new Buttons([
-            { id: 'menu', text: 'Menu' },    // Button that triggers "menu" command
-            { id: 'ping', text: 'Ping' }     // Button that triggers "ping" command
-        ]);
-
-        // Send the image with caption + buttons
+         // Send the image with caption + buttons
         await danuwa.sendMessage(from, {
             image: { url: config.ALIVE_IMG },
             caption: config.ALIVE_MSG,
             footer: 'Powered by Oshadha Bot', // Optional footer
             buttons: buttons.build()
         }, { quoted: mek });
-        
+
+            // 2. Buttons යැවීම
+            const buttons = [
+                { id: prefix + "ping", text: "⚡ PING" },
+                { id: prefix + "menu", text: "📜 MENU" },
+                { id: prefix + "settings", text: "⚙️ SETTINGS" },
+                { id: prefix + "help", text: "📞 HELP" },
+            ];
+
     } catch (e) {
         console.log(e);
         reply(`Error: ${e}`);
