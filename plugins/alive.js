@@ -20,11 +20,13 @@ cmd(
       // Message content
       const messageText = `💡 Hello ${userName}!\n🗓 Date: ${date}\n⏰ Time: ${time}\nBot is active ✅`;
 
-      // Buttons
-      const buttons = [
-        { id: "menu", text: "Menu" },
-        { id: "ping", text: "Ping" }
-      ];
+      // 2. Buttons යැවීම
+            const buttons = [
+                { id: prefix + "ping", text: "⚡ PING" },
+                { id: prefix + "menu", text: "📜 MENU" },
+                { id: prefix + "settings", text: "⚙️ SETTINGS" },
+                { id: prefix + "help", text: "📞 HELP" },
+            ];
 
       // Send image with buttons
       await sendButtons(from, messageText, "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiyaping.jpg", buttons);
