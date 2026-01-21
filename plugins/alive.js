@@ -1,5 +1,5 @@
 const { cmd } = require("../command");
-const { default: makeWASocket } = require("@adiwajshing/baileys");
+const { default: makeWASocket } = require("@rexxhayanasi/elaina-baileys");
 const { sendButton } = require("gifted-btns"); // gifted-btns import
 const moment = require("moment");
 
@@ -33,7 +33,7 @@ cmd(
       const buttons = [
         {
           buttonId: "menu",
-          buttonText: { displayText: "Menu" },
+          buttonText: { displayText: "⚡Menu" },
           type: 1,
         },
       ];
