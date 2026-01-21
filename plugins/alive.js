@@ -4,22 +4,24 @@ const os = require("os");
 const { sendButtons } = require("gifted-btns");
 
 cmd({
-    pattern: "alive",
+    pattern: 'alive',
     react: "⚡",
-    desc: "Check bot online or no.",
-    category: "main",
-    filename: __filename
-},
-async(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply}) => {
-try{
-const uptime = process.uptime();
-const msg = {
-    text: `*HEY ${pushname} I AM ALIVE NOW!* ⚡\n\n*UPTIME:* ${uptime}\n*OWNER:* Oshadha`,
-    footer: "ASITHA-MD BY OSHADHA",
-    buttons: [
-        {buttonId: '.ping', buttonText: {displayText: 'CHECK PING ⚡'}, type: 1},
-        {buttonId: '.menu', buttonText: {displayText: 'GET MENU 📜'}, type: 1}
-    ],
-    headerType: 1
-}
-await conn.sendMessage(from, msg
+    desc: 'Shows alive message with buttons.',
+    category: 'main'
+}, async (message, match) => {
+    const templateButtons = [
+        {index: 1, urlButton: {displayText: 'Join Support Group', url: 'https://chat.whatsapp.com/example'}},
+        {index: 2, urlButton: {displayText: 'Get Bot Code', url: 'https://github.com/asitha-md'}},
+        {index: 3, quickReplyButton: {displayText: 'PING', id: '.ping'}},
+        {index: 4, quickReplyButton: {displayText: 'MENU', id: '.menu'}},
+    ]
+
+    const buttonMessage = {
+        text: "Hey Oshadha, I am Asitha MD and I am alive! ⚡",
+        footer: 'Powered by Asitha MD',
+        templateButtons: templateButtons,
+        image: {url: "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiyaping.jpg"}
+    }
+
+    return await message.client.sendMessage(message.jid, buttonMessage)
+})
