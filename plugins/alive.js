@@ -1,65 +1,73 @@
 const { cmd } = require("../command");
-const fs = require("fs");
-const { sendButtons } = require("gifted-btns");
-
+const { buttonsMessage } = require("gifted-btns");
 
 cmd(
   {
     pattern: "alive",
     react: "🧬",
-    desc: "Alive check",
+    desc: "Alive status",
     category: "main",
     filename: __filename,
   },
-  async (oshiya, mek, m, { from, pushname }) => {
+  async (client, mek, m, { from, pushname }) => {
     try {
 
       // Date & Time
       const now = new Date();
-      const date = now.toLocaleDateString("en-GB");
-      const time = now.toLocaleTimeString("en-GB");
+      const date = now.toLocaleDateString("en-US");
+      const time = now.toLocaleTimeString("en-US");
 
-      // 🎤 1. VOICE MESSAGE (FIRST)
-      await oshiya.sendMessage(from, {
-        audio: {
-          url: "https://github.com/oshadha12345/images/raw/refs/heads/main/Voice/Funk%20criminal%20(slowed)%20-%20icedmane_%20dysmane%20%5Bedit%20audio%5D(MP3_160K).mp3"
+      // Alive text
+      const caption = `
+🤖 *BOT IS ONLINE*
+
+👤 *User* : ${pushname}
+📅 *Date* : ${date}
+⏰ *Time* : ${time}
+
+⚡ Powered By Oshada
+      `;
+
+      // Image
+      const image = {
+        url: "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiyaping.jpg"
+      };
+
+      // Buttons
+      const buttons = [
+        {
+          index: 1,
+          quickReplyButton: {
+            displayText: "📋 MENU",
+            id: "menu" // 👉 menu button eka click karama menu command eka yai
+          }
         },
-        mimetype: "audio/mpeg",
-        ptt: true
-      });
+        {
+          index: 2,
+          urlButton: {
+            displayText: "📲 WhatsApp",
+            url: "https://wa.me/94756599952"
+          }
+        }
+      ];
 
-      // Alive Text
-      const aliveMsg = `
-╭━━━〔 🤖 ALIVE STATUS 〕━━━╮
-┃ 👤 User : ${pushname}
-┃ 📅 Date : ${date}
-┃ ⏰ Time : ${time}
-┃ ⚡ Status : ONLINE
-╰━━━━━━━━━━━━━━━━━━━━╯
-`;
-
-      // 🖼️ 2. IMAGE + WHATSAPP BUTTONS
-      await oshiya.sendMessage(from, {
-        image: {
-          url: "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiyaping.jpg"
+      // Send message
+      await buttonsMessage(
+        client,
+        from,
+        {
+          image,
+          caption,
+          footer: "🧬 Alive Plugin",
+          buttons,
+          headerType: 4
         },
-        // 2. Buttons යැවීම
-            const buttons = [
-                { id: prefix + "ping", text: "⚡ PING" },
-                { id: prefix + "menu", text: "📜 MENU" },
-                { id: prefix + "ping", text: "⚙️ ping" },
-                { id: prefix + "help", text: "📞 HELP" },
-            ];
+        mek
+      );
 
-            return await sendButtons(oshiya, from, {
-                text: finalMsg,
-                footer: `© ${botName} - System`,
-                buttons: buttons
-            });
-
-    } catch (e) {
-      console.log(e);
-      await oshiya.sendMessage(from, { text: "❌ Alive plugin error!" });
+    } catch (err) {
+      console.log(err);
+      await m.reply("❌ Alive plugin error");
     }
   }
 );
