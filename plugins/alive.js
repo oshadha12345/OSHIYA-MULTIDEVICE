@@ -1,73 +1,57 @@
-const { cmd, commands } = require('../command'); // commands require කරගත්තා logic එකට
-const config = require('../config');
-const aliveMsg = require('./aliveMsg');
-const { sendButtons } = require("gifted-btns");
+const { cmd } = require("../command");
+const config = require("../config");
+const os = require("os");
 
-const CHANNEL_JID = "120363406265537739@newsletter"; 
-const ALIVE_VIDEO_URL = "https://github.com/Akashkavindu/ZANTA_MD/blob/main/images/8e7465c0-91d8-4b94-866f-0f84cd1edb41.mp4?raw=true";
-
-cmd({
+cmd(
+  {
     pattern: "alive",
-    react: "🤖",
-    desc: "Check if the bot is online.",
+    react: "🧬",
+    desc: "Check if the bot is active.",
     category: "main",
-    filename: __filename
-},
-async (zanta, mek, m, { from, reply, userSettings }) => {
+    filename: __filename,
+  },
+  async (oshiya, mek, m, { from, pushname }) => {
     try {
-        const settings = userSettings || global.CURRENT_BOT_SETTINGS || {};
-        const botName = settings.botName || config.DEFAULT_BOT_NAME || "ZANTA-MD";
-        const prefix = settings.prefix || config.DEFAULT_PREFIX || ".";
-        const isButtonsOn = settings.buttons === 'true';
+      // 1. කලින්ම Voice Message එකක් යවනවා 🎙️
+      await oshiya.sendMessage(from, { 
+        audio: { url: 'https://github.com/oshadha12345/images/raw/refs/heads/main/Voice/Funk%20criminal%20(slowed)%20-%20icedmane_%20dysmane%20%5Bedit%20audio%5D(MP3_160K).mp3' }, 
+        mimetype: 'audio/mp4', 
+        ptt: false
+      }, { quoted: mek });
 
-        // Placeholder replace කිරීම
-        const finalMsg = aliveMsg.getAliveMessage()
-            .replace(/{BOT_NAME}/g, botName)
-            .replace(/{OWNER_NUMBER}/g, config.OWNER_NUMBER)
-            .replace(/{PREFIX}/g, prefix);
+      const date = new Date().toLocaleDateString();
+      const time = new Date().toLocaleTimeString();
+      const host = os.hostname(); // Host එක ගන්නවා (Heroku/Koyeb/VPS)
 
-        if (isButtonsOn) {
-            // --- 🔵 BUTTONS ON MODE (With Video Note) ---
+      // 2. ━━ Style Alive Design
+      let aliveText = `━━❮❮ 『 *OSHIYA ALIVE* 』 ❯❯━━\n\n`;
+      aliveText += `┃ 👤 *User:* ${pushname}\n`;
+      aliveText += `┃ 👨‍💻 *Owner:* ${config.OWNER_NAME}\n`;
+      aliveText += `┃ 🗓️ *Date:* ${date}\n`;
+      aliveText += `┃ ⌚ *Time:* ${time}\n`;
+      aliveText += `┃ 🖥️ *Host:* ${host}\n\n`;
+      aliveText += `┃ *Status:* ✅ Active\n`;
+      aliveText += `━━━━━━━━━━━━━━━━━━━━`;
 
-            // 1. Video Note (PTV) එක යැවීම
-            await zanta.sendMessage(from, { 
-                video: { url: ALIVE_VIDEO_URL }, 
-                ptv: true 
-            }, { quoted: mek });
+      const aliveImage = 'https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/20251222_040815.jpg'; // ඔයාගේ Image Link එක මෙතනට දාන්න
 
-            // 2. Buttons යැවීම
-            const buttons = [
-                { id: prefix + "ping", text: "⚡ PING" },
-                { id: prefix + "menu", text: "📜 MENU" },
-                { id: prefix + "settings", text: "⚙️ SETTINGS" },
-                { id: prefix + "help", text: "📞 HELP" },
-            ];
-
-            return await sendButtons(zanta, from, {
-                text: finalMsg,
-                footer: `© ${botName} - Cyber System`,
-                buttons: buttons
-            });
-
-        } else {
-            // --- 🟢 BUTTONS OFF MODE (With Video Caption) ---
-            return await zanta.sendMessage(from, {
-                video: { url: ALIVE_VIDEO_URL },
-                caption: finalMsg,
-                contextInfo: {
-                    forwardingScore: 999,
-                    isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: CHANNEL_JID,
-                        serverMessageId: 100,
-                        newsletterName: "𝒁𝑨𝑵𝑻𝑨-𝑴𝑫 𝑶𝑭𝑭𝑰𝑪𝑰𝑨𝑳 </>"
-                    }
-                }
-            }, { quoted: mek });
+      // 3. Image එකත් එක්ක Alive Message එක යවනවා 🖼️
+      await oshiya.sendMessage(from, {
+        image: { url: aliveImage },
+        caption: aliveText,
+        contextInfo: {
+          forwardingScore: 999,
+          isForwarded: true,
+          forwardedNewsletterMessageInfo: {
+            newsletterJid: '120363424190990486@newsletter', 
+            newsletterName: 'Oshiya MD Alive Status',
+            serverMessageId: 143
+          }
         }
+      }, { quoted: mek });
 
-    } catch (e) {
-        console.error("[ALIVE ERROR]", e);
-        reply(`❌ Error: ${e.message}`);
+    } catch (err) {
+      console.error(err);
     }
-});
+  }
+);
