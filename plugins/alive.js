@@ -43,21 +43,19 @@ cmd(
         image: {
           url: "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiyaping.jpg"
         },
-        caption: aliveMsg,
-        buttons: [
-          {
-            buttonId: "menu",
-            buttonText: { displayText: "📜 MENU" },
-            type: 1
-          },
-          {
-            buttonId: "ping",
-            buttonText: { displayText: "📡 PING" },
-            type: 1
-          }
-        ],
-        headerType: 4
-      });
+        // 2. Buttons යැවීම
+            const buttons = [
+                { id: prefix + "ping", text: "⚡ PING" },
+                { id: prefix + "menu", text: "📜 MENU" },
+                { id: prefix + "ping", text: "⚙️ ping" },
+                { id: prefix + "help", text: "📞 HELP" },
+            ];
+
+            return await sendButtons(oshiya, from, {
+                text: finalMsg,
+                footer: `© ${botName} - System`,
+                buttons: buttons
+            });
 
     } catch (e) {
       console.log(e);
