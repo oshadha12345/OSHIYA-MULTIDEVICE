@@ -46,6 +46,7 @@
     "fb-downloader-scrapper": "^3.0.1",
     "wikijs": "^6.4.1",
     "sadaslk-dlcore": "^1.0.0",
+    "gifted-btns": "^1.0.0",
     "puppeteer": "^24.35.0",
     "abir-photo360-apis": "^1.0.2"
   }
