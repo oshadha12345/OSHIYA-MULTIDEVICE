@@ -1,48 +1,43 @@
-const { cmd } = require("../command");
-const { default: makeWASocket } = require("@rexxhayanasi/elaina-baileys");
-const { sendButton } = require("gifted-btns"); // gifted-btns import
-const moment = require("moment");
+const { cmd, commands } = require('../command');
+const { sendButtons } = require("gifted-btns");
 
-cmd(
-  {
+cmd({
     pattern: "alive",
-    react: "🧬",
-    desc: "Check if the bot is active.",
+    react: "⚡",
+    desc: "To check bot is online.",
     category: "main",
-    filename: __filename,
-  },
-  async (oshiya, mek, m, { from, pushname }) => {
-    try {
-      // 1️⃣ Date & Time
-      const date = moment().format("YYYY-MM-DD");
-      const time = moment().format("HH:mm:ss");
+    filename: __filename
+},
+async(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply}) => {
+try{
+    const date = new Date().toLocaleDateString()
+    const time = new Date().toLocaleTimeString()
+    const day = new Date().toLocaleDateString('en-US', { weekday: 'long' })
 
-      // 2️⃣ Voice message
-      const voiceUrl = "https://github.com/oshadha12345/images/raw/refs/heads/main/Voice/Funk%20criminal%20(slowed)%20-%20icedmane_%20dysmane%20%5Bedit%20audio%5D(MP3_160K).mp3";
-      await oshiya.sendMessage(
-        from,
-        { audio: { url: voiceUrl }, mimetype: "audio/mp3" },
-        { quoted: m }
-      );
+    let aliveMsg = `━━━『 *OSHIYA-MD ALIVE* 』━━━
 
-      // 3️⃣ Text message with image
-      const textMsg = `👋 Hello ${pushname}!\n📅 Date: ${date}\n⏰ Time: ${time}\nBot is active ✅`;
-      const imageUrl = "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiyaping.jpg";
+👤 *USER:* ${pushname}
+📅 *DATE:* ${date}
+🕒 *TIME:* ${time}
+🗓️ *DAY:* ${day}
 
-      // 4️⃣ Gifted button
-      const buttons = [
-        {
-          buttonId: "menu",
-          buttonText: { displayText: "⚡Menu" },
-          type: 1,
-        },
-      ];
+> POWERED BY OSHADHA MANUPPRIYA
+━━━━━━━━━━━━━━━━━━━`
 
-      await sendButton(oshiya, from, textMsg, imageUrl, buttons, m);
+    return await conn.sendMessage(from, { 
+        image: { url: `https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/20251222_040815.jpg` }, 
+        caption: aliveMsg,
+        footer: 'OSHIYA BOT',
+        buttons: [
+            { buttonId: '.menu', buttonText: { displayText: '📜 MENU' }, type: 1 },
+            { buttonId: '.ping', buttonText: { displayText: '⚡ PING' }, type: 1 },
+            { buttonId: '.help', buttonText: { displayText: '❓ HELP' }, type: 1 }
+        ],
+        headerType: 4
+    }, { quoted: mek })
 
-    } catch (err) {
-      console.log("Alive plugin error:", err);
-      await oshiya.sendMessage(from, { text: "❌ Something went wrong!" }, { quoted: m });
-    }
-  }
-);
+} catch (e) {
+    console.log(e)
+    reply(`${e}`)
+}
+})
