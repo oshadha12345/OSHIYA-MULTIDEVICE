@@ -22,7 +22,7 @@ try {
 
     // 📝 Alive Message
     const aliveText = `
-🤖 *${config.BOT_NAME} IS ONLINE*
+🤖 oshi IS ONLINE*
 
 👤 *User* : ${pushname}
 📅 *Date* : ${date}
@@ -31,7 +31,7 @@ try {
 ⚙️ *RAM* : ${(os.totalmem() / 1024 / 1024).toFixed(0)} MB
 🚀 *Uptime* : ${Math.floor(uptime / 60)} Minutes
 
-Powered By *${config.OWNER_NAME}*
+Powered By oshi
 `;
 
     // 🔘 UL Buttons (gifted-btns)
@@ -62,7 +62,7 @@ Powered By *${config.OWNER_NAME}*
             title: "🧬 Alive Menu",
             buttonText: "OPEN MENU",
             sections: buttons,
-            image: { url: config.ALIVE_IMAGE }
+            image: { url: "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/20251222_040815.jpg" }
         },
         { quoted: mek }
     );
