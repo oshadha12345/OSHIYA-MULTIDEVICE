@@ -1,60 +1,54 @@
-const { cmd } = require('../command');
-const gifted = require('gifted-btns');
+const { cmd } = require("../command");
 
 cmd({
     pattern: "alive",
-    react: "🧬",
-    desc: "Check if bot is alive",
+    react: "🤖",
+    desc: "Check bot alive status",
     category: "main",
     filename: __filename
 },
-async (conn, mek, m, { from }) => {
-try {
+async (conn, mek, m, { from, pushname, reply }) => {
+    try {
+        const startTime = Date.now()
+        const msg = await conn.sendMessage(from, { text: "🤖 *Checking Bot Status...*" })
+        const endTime = Date.now()
 
-    // 📝 Alive Message
-    const text = `
-🤖 *POWER BOY OSHADHA IS ONLINE*
+        const latency = endTime - startTime
+        const uptime = runtime(process.uptime())
 
-👤 *User*: OSHIYA MD
-⚡ *Status*: Fully Functional
+        const day = new Date().toLocaleDateString('en-US', { weekday: 'long' })
+        const date = new Date().toLocaleDateString()
+        const time = new Date().toLocaleTimeString()
 
-Powered By *Oshadha*
-`;
+        const ownerName = "Oshadha Manuppriya"
+        const ownerNumber = "+94XXXXXXXXX" // 👑 owner number මෙතන දාන්න
+        const botName = "OSHIYA MD"
 
-    // 🔘 UL List Buttons
-    const sections = [
-        {
-            title: "📂 Bot Menu",
-            rows: [
-                { title: "📜 Menu", rowId: ".menu", description: "Open full menu" },
-                { title: "⚡ Ping", rowId: ".ping", description: "Check bot speed" }
-            ]
-        },
-        {
-            title: "👑 Owner",
-            rows: [
-                { title: "👤 Owner", rowId: ".owner", description: "Bot owner info" }
-            ]
-        }
-    ];
+        const responseText = `🤖 *${botName} ALIVE STATUS* 🤖
 
-    // 📤 Send Alive Message with Image
-    await gifted.sendList(
-        conn,
-        from,
-        {
-            title: "🧬 Alive Status",
-            text: text,
-            footer: "Select an option below 👇",
-            buttonText: "OPEN MENU",
-            sections: sections,
-            image: { url: "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/20251222_040815.jpg" }
-        },
-        { quoted: mek }
-    );
+👋 *Hello:* ${pushname}
 
-} catch (err) {
-    console.log(err);
-    await conn.sendMessage(from, { text: "❌ Alive Error" }, { quoted: mek });
-}
-});
+🟢 *Status:* Alive & Running
+📶 *Ping:* ${latency}ms
+⏳ *Uptime:* ${uptime}
+
+📅 *Day:* ${day}
+📆 *Date:* ${date}
+⏰ *Time:* ${time}
+
+👑 *Owner:* ${ownerName}
+📞 *Owner Number:* ${ownerNumber}
+
+💻 *System Info:*
+- Platform: ${os.platform()}
+- RAM: ${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB
+
+✨ *Bot is working perfectly!*`
+
+        await conn.sendMessage(from, { text: responseText, edit: msg.key })
+
+    } catch (e) {
+        console.log(e)
+        reply("Alive status check කරනකොට error එකක් ආවා ❌")
+    }
+})
