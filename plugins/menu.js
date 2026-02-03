@@ -31,7 +31,7 @@ cmd(
       }
 
       // 2. Stylish ━ Menu Design
-      let menuText = `━❮❮ 『 *OSHIYA MD* 』 ❯❯━\n`;
+      let menuText = `━❮❮ 『 *OSHIYA MD* 』 ❯❯━\n\n`;
       menuText += `┃ 👤 *User:* ${pushname}\n`;
       menuText += `┃ 👨‍💻 *Owner:* ${config.OWNER_NAME}\n`;
       menuText += `┃ 🗓️ *Date:* ${date}\n`;
