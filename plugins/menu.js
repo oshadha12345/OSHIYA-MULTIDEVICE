@@ -1,6 +1,9 @@
 const { cmd, commands } = require("../command");
 const config = require("../config");
 const pkg = require("../package.json");
+const { sendButtons } =
+require('gifted-btns');
+
 
 cmd(
   {
