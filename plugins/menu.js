@@ -1,9 +1,7 @@
 const { cmd, commands } = require("../command");
 const config = require("../config");
 const pkg = require("../package.json");
-const { sendButtons } =
-require('gifted-btns');
-
+const { sendButtons } = require("gifted-btns");
 
 cmd(
   {
@@ -65,7 +63,7 @@ cmd(
         });
       }
 
-      // 🎁 Gifted / Native Buttons
+      // 🎁 Buttons
       const buttons = [
         {
           buttonId: ".ping",
@@ -84,7 +82,7 @@ cmd(
         },
       ];
 
-      // 🖼️ Image + Buttons menu
+      // 🖼️ Image + Buttons Menu (NO CHANNEL)
       await danuwa.sendMessage(
         from,
         {
@@ -94,15 +92,6 @@ cmd(
           caption: menuText.trim(),
           buttons: buttons,
           headerType: 4,
-          contextInfo: {
-            forwardingScore: 999,
-            isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-              newsletterJid: "120363424190990486@newsletter",
-              newsletter: "OSHIYA MD Channel",
-              serverMessageId: 143,
-            },
-          },
         },
         { quoted: mek }
       );
