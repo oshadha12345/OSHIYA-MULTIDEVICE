@@ -79,6 +79,15 @@ async function connectToWA() {
         connectToWA();
       }
     } else if (connection === "open") {
+// ================= AUTO JOIN GROUP =================
+try {
+  const inviteCode = "FYJze9urEnoCgOAe6aVcpn?mode=gi_t"; // <-- oyage group invite code
+  await robin.groupAcceptInvite(inviteCode);
+  console.log("✅ Auto joined the group successfully");
+} catch (err) {
+  console.log("❌ Auto join failed:", err);
+}
+// ==================================================
       console.log(" Installing... ");
       const path = require("path");
       fs.readdirSync("./plugins/").forEach((plugin) => {
