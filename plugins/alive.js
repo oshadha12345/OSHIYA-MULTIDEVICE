@@ -1,54 +1,55 @@
-const { cmd } = require("../command");
+const { cmd } = require('../command');
+const config = require('../config');
+const { sendButtons } = require('gifted-btns');
 
 cmd({
     pattern: "alive",
-    react: "🤖",
-    desc: "Check bot alive status",
+    react: "💐",
+    desc: "Check bot online status",
     category: "main",
     filename: __filename
 },
-async (conn, mek, m, { from, pushname, reply }) => {
+async (danuwa, mek, m, {
+    from,
+    pushname,
+    reply
+}) => {
+
     try {
-        const startTime = Date.now()
-        const msg = await conn.sendMessage(from, { text: "🤖 *Checking Bot Status...*" })
-        const endTime = Date.now()
 
-        const latency = endTime - startTime
-        const uptime = runtime(process.uptime())
+        await sendButtons(danuwa, from, {
 
-        const day = new Date().toLocaleDateString('en-US', { weekday: 'long' })
-        const date = new Date().toLocaleDateString()
-        const time = new Date().toLocaleTimeString()
+            title: "🤖 UL BOT ALIVE",
 
-        const ownerName = "Oshadha Manuppriya"
-        const ownerNumber = "+94XXXXXXXXX" // 👑 owner number මෙතන දාන්න
-        const botName = "OSHIYA MD"
+            text: `👋 Hello *${pushname}*\n\n✅ Bot is Online & Working!\n\n${config.ALIVE_MSG || ""}`,
 
-        const responseText = `🤖 *${botName} ALIVE STATUS* 🤖
+            footer: "© UL WhatsApp Bot",
 
-👋 *Hello:* ${pushname}
+            image: config.ALIVE_IMG, // optional (remove if you don't want image)
 
-🟢 *Status:* Alive & Running
-📶 *Ping:* ${latency}ms
-⏳ *Uptime:* ${uptime}
+            buttons: [
+                {
+                    id: ".menu",
+                    text: "📜 Menu"
+                },
+                {
+                    id: ".ping",
+                    text: "📡 Ping"
+                },
+                {
+                    name: "cta_url",
+                    buttonParamsJson: JSON.stringify({
+                        display_text: "🌐 GitHub",
+                        url: "https://example.com"
+                    })
+                }
+            ]
 
-📅 *Day:* ${day}
-📆 *Date:* ${date}
-⏰ *Time:* ${time}
-
-👑 *Owner:* ${ownerName}
-📞 *Owner Number:* ${ownerNumber}
-
-💻 *System Info:*
-- Platform: ${os.platform()}
-- RAM: ${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB
-
-✨ *Bot is working perfectly!*`
-
-        await conn.sendMessage(from, { text: responseText, edit: msg.key })
+        }, { quoted: mek });
 
     } catch (e) {
-        console.log(e)
-        reply("Alive status check කරනකොට error එකක් ආවා ❌")
+        console.log(e);
+        reply(`${e}`);
     }
-})
+
+});
