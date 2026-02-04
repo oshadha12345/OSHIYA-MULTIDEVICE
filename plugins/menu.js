@@ -1,13 +1,13 @@
 const { cmd, commands } = require("../command");
 const config = require("../config");
 const pkg = require("../package.json");
-const { sendButtons } = require("gifted-btns");
+const { sendInteractiveMessage } = require("gifted-btns");
 
 cmd(
   {
     pattern: "menu",
     react: "📜",
-    desc: "Stylish menu with gifted buttons",
+    desc: "Interactive menu",
     category: "main",
     filename: __filename,
   },
@@ -30,6 +30,7 @@ cmd(
 
       const date = new Date().toLocaleDateString();
       const time = new Date().toLocaleTimeString();
+      const ping = Date.now() - start;
 
       // 📂 Category system
       const categories = {};
@@ -40,10 +41,21 @@ cmd(
         categories[cat].push(cmdData.pattern);
       }
 
-      const ping = Date.now() - start;
+      // 📋 Build rows for interactive menu
+      const sections = [];
 
-      // 📜 Menu Text
-      let menuText = `━❮❮ 『 *OSHIYA MD* 』 ❯❯━
+      for (const [cat, cmds] of Object.entries(categories)) {
+        sections.push({
+          title: cat.toUpperCase(),
+          rows: cmds.map((pattern) => ({
+            id: `.${pattern}`,
+            title: pattern,
+            description: `Run ${pattern} command`
+          }))
+        });
+      }
+
+      const menuText = `🤖 *OSHIYA MD MENU*
 
 👤 User : ${pushname}
 👨‍💻 Owner : ${config.OWNER_NAME}
@@ -53,38 +65,17 @@ cmd(
 🛡️ Mode : ${config.MODE}
 📡 Ping : ${ping} ms
 
-━❮❮ COMMAND LIST ❯❯━`;
+📜 Select a command below`;
 
-      for (const [cat, cmds] of Object.entries(categories)) {
-        menuText += `\n\n━━━❮ ${cat.toUpperCase()} ❯━━━\n`;
-        cmds.forEach((pattern) => {
-          menuText += `➤ .${pattern}\n`;
-        });
-      }
-
-      // 🎁 Gifted Buttons
-      await sendButtons(danuwa, from, {
-        title: "🤖 OSHIYA MD MENU",
+      // 🎁 Interactive Message
+      await sendInteractiveMessage(danuwa, from, {
         text: menuText,
-        footer: "´´´Select option below´´´",
-        buttons: [
+        interactiveButtons: [
           {
-            id: ".ping",
-            text: "📡 Ping",
-          },
-          {
-            id: ".alive",
-            text: "🤖 Alive",
-          },
-          {
-            id: ".help",
-            text: "👨‍💻 Owner",
-          },
-          {
-            name: "cta_url",
+            name: "single_select",
             buttonParamsJson: JSON.stringify({
-              display_text: "🌐 GitHub Repo",
-              url: "https://github.com/oshadha12345/OSHIYA-MULTIDEVICE"
+              title: "📂 Command Menu",
+              sections: sections
             })
           }
         ]
