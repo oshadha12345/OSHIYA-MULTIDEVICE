@@ -1,55 +1,79 @@
 const { cmd } = require('../command');
-const config = require('../config');
 const { sendButtons } = require('gifted-btns');
+const os = require('os');
+const moment = require('moment-timezone');
 
 cmd({
     pattern: "alive",
     react: "💐",
-    desc: "Check bot online status",
+    desc: "Bot Alive Check",
     category: "main",
     filename: __filename
 },
-async (danuwa, mek, m, {
-    from,
-    pushname,
-    reply
-}) => {
+async (sock, m, args) => {
 
-    try {
+    const jid = m.key.remoteJid;
 
-        await sendButtons(danuwa, from, {
+    // ===== USER NAME =====
+    const user = m.pushName || "💐";
 
-            title: "🤖 UL BOT ALIVE",
+    // ===== BOT NAME =====
+    const botName = "OSHIYA-XMD";
 
-            text: `👋 Hello *${pushname}*\n\n✅ Bot is Online & Working!\n\n${config.ALIVE_MSG || ""}`,
+    // ===== OWNER NAME =====
+    const owner = "Oshadha";
 
-            footer: "© UL WhatsApp Bot",
+    // ===== PLATFORM =====
+    const platform = os.platform();
 
-            image: config.ALIVE_IMG, // optional (remove if you don't want image)
+    // ===== DATE =====
+    const date = moment().tz("Asia/Colombo").format("YYYY-MM-DD");
 
-            buttons: [
-                {
-                    id: ".menu",
-                    text: "📜 Menu"
-                },
-                {
-                    id: ".ping",
-                    text: "📡 Ping"
-                },
-                {
-                    name: "cta_url",
-                    buttonParamsJson: JSON.stringify({
-                        display_text: "🌐 GitHub",
-                        url: "https://example.com"
-                    })
-                }
-            ]
+    // ===== STYLE MESSAGE =====
+    const aliveText = `
+╭━━〔 🤖 ${botName} 〕━━⬣
+┃
+┃ 👤 User : ${user}
+┃ 📅 Date : ${date}
+┃ 💻 Platform : ${platform}
+┃ 👑 Owner : ${owner}
+┃
+┃ ✅ Bot Running Perfectly
+┃ ⚡ Status : Online
+┃
+╰━━━━━━━━━━━━━━⬣
+`;
 
-        }, { quoted: mek });
+    await sendButtons(sock, jid, {
 
-    } catch (e) {
-        console.log(e);
-        reply(`${e}`);
-    }
+        title: "✨ BOT ALIVE",
+
+        text: aliveText,
+
+        footer: "´´´Oshiya md´´´",
+
+        buttons: [
+
+            // ===== MENU BUTTON =====
+            {
+                id: ".menu",
+                text: "📜 Menu"
+            },
+
+            // ===== HELP BUTTON =====
+            {
+                id: ".help",
+                text: "❓ Help"
+            },
+
+            // ===== WHATSAPP URL BUTTON =====
+            {
+                url: "https://wa.me/94756599952",
+                text: "📞 Owner WhatsApp"
+            }
+
+        ]
+
+    }, { quoted: m });
 
 });
