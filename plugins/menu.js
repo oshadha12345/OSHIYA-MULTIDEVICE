@@ -7,15 +7,15 @@ cmd(
   {
     pattern: "menu",
     react: "📜",
-    desc: "Stylish menu with voice, image, buttons & ping",
+    desc: "Stylish menu with gifted buttons",
     category: "main",
     filename: __filename,
   },
   async (danuwa, mek, m, { from, reply, pushname }) => {
     try {
-      const start = Date.now(); // ping start
+      const start = Date.now();
 
-      // 🎙️ Voice message
+      // 🎙️ Voice Message
       await danuwa.sendMessage(
         from,
         {
@@ -31,7 +31,7 @@ cmd(
       const date = new Date().toLocaleDateString();
       const time = new Date().toLocaleTimeString();
 
-      // 📂 Commands by category
+      // 📂 Category system
       const categories = {};
       for (let cmdName in commands) {
         const cmdData = commands[cmdName];
@@ -42,62 +42,57 @@ cmd(
 
       const ping = Date.now() - start;
 
-      // 📜 Menu text
+      // 📜 Menu Text
       let menuText = `━❮❮ 『 *OSHIYA MD* 』 ❯❯━
 
-👤 *User:* ${pushname}
-👨‍💻 *Owner:* ${config.OWNER_NAME}
-🗓️ *Date:* ${date}
-⌚ *Time:* ${time}
-🧬 *Version:* ${pkg.version}
-🛡️ *Mode:* ${config.MODE}
-📡 *Ping:* ${ping} ms
+👤 User : ${pushname}
+👨‍💻 Owner : ${config.OWNER_NAME}
+🗓️ Date : ${date}
+⌚ Time : ${time}
+🧬 Version : ${pkg.version}
+🛡️ Mode : ${config.MODE}
+📡 Ping : ${ping} ms
 
-━❮❮ 『 *COMMAND LIST* 』 ❯❯━
-`;
+━❮❮ COMMAND LIST ❯❯━`;
 
       for (const [cat, cmds] of Object.entries(categories)) {
-        menuText += `\n━━━❮ *${cat.toUpperCase()}* ❯━━━\n`;
+        menuText += `\n\n━━━❮ ${cat.toUpperCase()} ❯━━━\n`;
         cmds.forEach((pattern) => {
           menuText += `➤ .${pattern}\n`;
         });
       }
 
-      // 🎁 Buttons
-      const buttons = [
-        {
-          buttonId: ".ping",
-          buttonText: { displayText: "📡 PING" },
-          type: 1,
-        },
-        {
-          buttonId: ".alive",
-          buttonText: { displayText: "🤖 ALIVE" },
-          type: 1,
-        },
-        {
-          buttonId: ".owner",
-          buttonText: { displayText: "👨‍💻 OWNER" },
-          type: 1,
-        },
-      ];
-
-      // 🖼️ Image + Buttons Menu (NO CHANNEL)
-      await danuwa.sendMessage(
-        from,
-        {
-          image: {
-            url: "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiya_md.png",
+      // 🎁 Gifted Buttons
+      await sendButtons(danuwa, from, {
+        title: "🤖 OSHIYA MD MENU",
+        text: menuText,
+        footer: "´´´Select option below´´´",
+        buttons: [
+          {
+            id: ".ping",
+            text: "📡 Ping",
           },
-          caption: menuText.trim(),
-          buttons: buttons,
-          headerType: 4,
-        },
-        { quoted: mek }
-      );
+          {
+            id: ".alive",
+            text: "🤖 Alive",
+          },
+          {
+            id: ".help",
+            text: "👨‍💻 Owner",
+          },
+          {
+            name: "cta_url",
+            buttonParamsJson: JSON.stringify({
+              display_text: "🌐 GitHub Repo",
+              url: "https://github.com/oshadha12345/OSHIYA-MULTIDEVICE"
+            })
+          }
+        ]
+      });
+
     } catch (err) {
-      console.error(err);
-      reply("❌ Error generating menu.");
+      console.log(err);
+      reply("❌ Menu error");
     }
   }
 );
