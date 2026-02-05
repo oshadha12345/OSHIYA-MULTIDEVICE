@@ -1,79 +1,45 @@
-const { cmd } = require('../command');
-const { sendButtons } = require('gifted-btns');
-const os = require('os');
-const moment = require('moment-timezone');
+const { cmd } = require("../command");
+const config = require("../config");
+const pkg = require("../package.json");
+const { sendButtons } = require("gifted-btns");
 
 cmd({
     pattern: "alive",
     react: "💐",
-    desc: "Bot Alive Check",
+    desc: "Check bot alive status",
     category: "main",
     filename: __filename
 },
-async (sock, m, args) => {
+async (conn, mek, m, { from, pushname, reply }) => {
 
-    const jid = m.key.remoteJid;
-
-    // ===== USER NAME =====
-    const user = m.pushName || "💐";
-
-    // ===== BOT NAME =====
-    const botName = "OSHIYA-XMD";
-
-    // ===== OWNER NAME =====
-    const owner = "Oshadha";
-
-    // ===== PLATFORM =====
-    const platform = os.platform();
-
-    // ===== DATE =====
-    const date = moment().tz("Asia/Colombo").format("YYYY-MM-DD");
-
-    // ===== STYLE MESSAGE =====
     const aliveText = `
-╭━━〔 🤖 ${botName} 〕━━⬣
-┃
-┃ 👤 User : ${user}
-┃ 📅 Date : ${date}
-┃ 💻 Platform : ${platform}
-┃ 👑 Owner : ${owner}
-┃
-┃ ✅ Bot Running Perfectly
-┃ ⚡ Status : Online
-┃
-╰━━━━━━━━━━━━━━⬣
+╭━━━〔 🤖 BOT ALIVE 〕━━━╮
+┃ 👤 User : ${pushname}
+┃ 👑 Owner : ${config.OWNER_NAME}
+┃ 🧩 Bot : Oshiya-Xmd
+┃ 🔢 Version : ${pkg.version}
+┃ 📅 Date : ${new Date().toLocaleDateString()}
+┃ ⏰ Time : ${new Date().toLocaleTimeString()}
+╰━━━━━━━━━━━━━━━━━━━╯
 `;
 
-    await sendButtons(sock, jid, {
-
-        title: "✨ BOT ALIVE",
-
+    await sendButtons(conn, from, {
+        image: config.ALIVE_IMG || "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/20251222_040815.jpg",
+        title: "𝙾𝚜𝚑𝚒𝚢𝚊 𝙾𝚏𝚏𝚒𝚌𝚒𝚊𝚕 💐",
         text: aliveText,
-
-        footer: "´´´Oshiya md´´´",
-
+        footer: "𝙼𝚊𝚍𝚎 𝙱𝚢 𝙾𝚜𝚑𝚊𝚍𝚑𝚊 💐",
         buttons: [
-
-            // ===== MENU BUTTON =====
             {
-                id: ".menu",
-                text: "📜 Menu"
+                buttonId: ".menu",
+                buttonText: { displayText: "📜 Menu" },
+                type: 1
             },
-
-            // ===== HELP BUTTON =====
             {
-                id: ".help",
-                text: "❓ Help"
-            },
-
-            // ===== WHATSAPP URL BUTTON =====
-            {
-                url: "https://wa.me/94756599952",
-                text: "📞 Owner WhatsApp"
+                buttonId: ".ping",
+                buttonText: { displayText: "🏓 Ping" },
+                type: 1
             }
-
         ]
-
-    }, { quoted: m });
+    });
 
 });
