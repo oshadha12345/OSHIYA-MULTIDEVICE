@@ -110,7 +110,7 @@ await sendInteractiveMessage(danuwa, from, {
         sections: [{
           title: 'Main',
           rows: [
-            { id: '.ping', title: '💐, description: 'First choice' },
+            { id: '.ping', title: '💐', description: 'First choice' },
             { id: '.help, title: 'Second', description: 'Second choice' }
           ]
         }]
