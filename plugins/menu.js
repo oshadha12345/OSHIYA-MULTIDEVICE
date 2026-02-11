@@ -10,6 +10,7 @@ const prefix = ".";
 
 const headerImage = "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/20251222_040815.jpg";
 
+
 // system info function
 function getInfo(sender) {
   return {
@@ -23,7 +24,11 @@ function getInfo(sender) {
 }
 
 
+
+//////////////////////////////
 // MAIN MENU
+//////////////////////////////
+
 cmd({
   pattern: "menu",
   react: "📋",
@@ -36,16 +41,23 @@ cmd({
 
   const commandMap = {};
 
-  commands.forEach(cmd => {
-    if (cmd.dontAddCommandList) return;
-    const cat = (cmd.category || "misc").toUpperCase();
+  // group commands by category
+  commands.forEach(command => {
+
+    if (command.dontAddCommandList) return;
+
+    const cat = (command.category || "misc").toUpperCase();
+
     if (!commandMap[cat]) commandMap[cat] = [];
-    commandMap[cat].push(cmd);
+
+    commandMap[cat].push(command);
+
   });
 
   const categories = Object.keys(commandMap);
 
-  // ━ style text
+
+  // menu text
   let text = `
 ╭━━━〔 *BOT MENU* 〕━━━┈⊷
 ┃ 👤 User     : ${info.user}
@@ -60,57 +72,80 @@ cmd({
 📂 *Select a Category Below*
 `;
 
+
   await sock.sendMessage(from, {
     image: { url: headerImage },
     caption: text
   }, { quoted: m });
 
-  // interactive category buttons
+
+  // create category rows
   const rows = categories.map(cat => ({
     id: `cat_${cat}`,
     title: cat,
     description: `${commandMap[cat].length} commands`
   }));
 
+
   await sendInteractiveMessage(sock, from, {
+
     text: "Choose Category",
+
     interactiveButtons: [
       {
         name: "single_select",
         buttonParamsJson: JSON.stringify({
+
           title: "BOT MENU",
+
           sections: [
             {
               title: "CATEGORIES",
               rows: rows
             }
           ]
+
         })
       }
     ]
+
   });
 
+
   pendingMenu[sender] = { commandMap };
+
 });
 
 
+
+//////////////////////////////
 // CATEGORY SELECT
+//////////////////////////////
+
 cmd({
+
   filter: text => text.startsWith("cat_")
+
 }, async (sock, m, msg, { from, sender, body }) => {
+
 
   if (!pendingMenu[sender]) return;
 
+
   const category = body.replace("cat_", "");
+
   const cmds = pendingMenu[sender].commandMap[category];
 
   if (!cmds) return;
+
 
   let text = `
 ╭━━━〔 *${category} MENU* 〕━━━┈⊷
 `;
 
+
   const rows = [];
+
 
   cmds.forEach(command => {
 
@@ -122,53 +157,98 @@ cmd({
     text += `┃ ┗ ${command.desc || "No description"}\n`;
 
     rows.push({
-      id: `cmd_${command.pattern}`,
+
+      id: `${prefix}${command.pattern}`,
       title: `${prefix}${command.pattern}`,
       description: command.desc || "Command"
+
     });
 
   });
+
 
   text += `╰━━━━━━━━━━━━━━━┈⊷
 📦 Total Commands : ${cmds.length}
 `;
 
+
   await sock.sendMessage(from, {
+
     image: { url: headerImage },
     caption: text
+
   }, { quoted: m });
 
-  // interactive commands list
-  const prefix = "."; // 👈 prefix eka define karanna
 
-await sendInteractiveMessage(danuwa, from, {
-  text: 'Choose one item',
-  interactiveButtons: [
-    {
-      name: 'single_select',
-      buttonParamsJson: JSON.stringify({
-        title: 'Menu',
-        sections: [
-          {
-            title: 'Main',
-            rows: [
-              {
-                id: `${prefix}ping`, // 👈 me thanata prefix add kara
-                title: 'First',
-                description: 'First choice'
-              },
-              {
-                id: `${prefix}help`, // 👈 me thanatath
-                title: 'Second',
-                description: 'Second choice'
-              }
-            ]
-          }
-        ]
-      })
-    }
-  ]
+
+  await sendInteractiveMessage(sock, from, {
+
+    text: "Choose Command",
+
+    interactiveButtons: [
+      {
+        name: "single_select",
+
+        buttonParamsJson: JSON.stringify({
+
+          title: category,
+
+          sections: [
+            {
+              title: "COMMANDS",
+              rows: rows
+            }
+          ]
+
+        })
+
+      }
+    ]
+
+  });
+
+
 });
 
-  delete pendingMenu[sender];
+
+
+//////////////////////////////
+// COMMAND SELECT EXECUTE
+//////////////////////////////
+
+cmd({
+
+  filter: text => text.startsWith(prefix)
+
+}, async (sock, m, msg, { body }) => {
+
+
+  const commandName = body.slice(prefix.length).split(" ")[0].toLowerCase();
+
+
+  const command = commands.find(cmd =>
+    cmd.pattern === commandName ||
+    (cmd.alias && cmd.alias.includes(commandName))
+  );
+
+
+  if (!command) return;
+
+
+  // execute command
+  try {
+
+    await command.function(sock, m, msg, {
+      from: m.key.remoteJid,
+      sender: m.key.participant || m.key.remoteJid,
+      body: body
+    });
+
+  } catch (e) {
+
+    console.log("Command execute error:", e);
+
+  }
+
+
 });
