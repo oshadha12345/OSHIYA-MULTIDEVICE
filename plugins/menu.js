@@ -111,7 +111,7 @@ await sendInteractiveMessage(danuwa, from, {
           title: 'Main',
           rows: [
             { id: '.ping', title: '💐', description: 'First choice' },
-            { id: '.help, title: 'Second', description: 'Second choice' }
+            { id: '.help', title: 'Second', description: 'Second choice' }
           ]
         }]
     }) }
