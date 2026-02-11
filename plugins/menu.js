@@ -1,128 +1,174 @@
 const { cmd, commands } = require("../command");
-const config = require("../config");
+const fs = require("fs");
+const os = require("os");
+const moment = require("moment-timezone");
 const pkg = require("../package.json");
 const { sendInteractiveMessage } = require("gifted-btns");
 
-cmd(
-{
-pattern: "menu",
-react: "📜",
-desc: "Interactive menu",
-category: "main",
-filename: __filename,
-},
-async (danuwa, mek, m, { from, reply, pushname }) => {
+const pendingMenu = {};
+const prefix = ".";
 
-try {
+const headerImage = "https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/20251222_040815.jpg";
 
-
-// 🎙️ Voice Message
-await danuwa.sendMessage(
-from,
-{
-audio: {
-url: "https://github.com/oshadha12345/images/raw/refs/heads/main/Voice/Voce%20na%20mira%20(slowed_tiktok%20vers.)%20-%20hwungii_%20dj%20vjk1%20%5Bedit%20audio%5D(MP3_160K).mp3",
-},
-mimetype: "audio/mp4",
-ptt: false,
-},
-{ quoted: mek }
-);
-
-
-// 📅 Date & Time
-const date = new Date().toLocaleDateString();
-const time = new Date().toLocaleTimeString();
-
-
-// 📂 Category system
-const categories = {};
-
-for (let cmdName in commands) {
-
-const cmdData = commands[cmdName];
-const cat = cmdData.category?.toLowerCase() || "other";
-
-if (!categories[cat]) categories[cat] = [];
-
-categories[cat].push(cmdData.pattern);
-
+// system info function
+function getInfo(sender) {
+  return {
+    user: sender.split("@")[0],
+    platform: os.platform(),
+    host: os.hostname(),
+    date: moment().tz("Asia/Colombo").format("YYYY-MM-DD"),
+    time: moment().tz("Asia/Colombo").format("HH:mm:ss"),
+    version: pkg.version || "1.0.0"
+  };
 }
 
 
-// 📋 Emoji list
-const emojis = ["🌚","💐","🔥","⚡","🎯","📌","💎","🚀","🧬","🎵"];
+// MAIN MENU
+cmd({
+  pattern: "menu",
+  react: "📋",
+  desc: "Show interactive menu",
+  category: "main",
+  filename: __filename
+}, async (sock, m, msg, { from, sender }) => {
 
-let i = 0;
+  const info = getInfo(sender);
 
+  const commandMap = {};
 
-// 📋 Build interactive sections
-const sections = [];
+  commands.forEach(cmd => {
+    if (cmd.dontAddCommandList) return;
+    const cat = (cmd.category || "misc").toUpperCase();
+    if (!commandMap[cat]) commandMap[cat] = [];
+    commandMap[cat].push(cmd);
+  });
 
-for (const [cat, cmds] of Object.entries(categories)) {
+  const categories = Object.keys(commandMap);
 
-sections.push({
+  // ━ style text
+  let text = `
+╭━━━〔 *BOT MENU* 〕━━━┈⊷
+┃ 👤 User     : ${info.user}
+┃ ⚙ Prefix   : ${prefix}
+┃ 💻 Platform : ${info.platform}
+┃ 🖥 Host     : ${info.host}
+┃ 📅 Date     : ${info.date}
+┃ ⏰ Time     : ${info.time}
+┃ 🚀 Version  : v${info.version}
+╰━━━━━━━━━━━━━━━┈⊷
 
-title: `━❖ ${cat.toUpperCase()} ❖━`,
-
-rows: cmds.map((pattern) => {
-
-const emoji = emojis[i++ % emojis.length];
-
-return {
-
-id: `.${pattern}`,
-title: `${emoji} .${pattern}`,
-description: `Run .${pattern} command`
-
-};
-
-})
-
-});
-
-}
-
-
-// 🤖 META ━ STYLE MENU TEXT
-const menuText = `
-╭━━━〔 🤖 OSHIYA MD MENU 〕━━━⬣
-┃👤 User : ${pushname}
-┃👨‍💻 Owner : ${config.OWNER_NAME}
-┃🗓️ Date : ${date}
-┃⌚ Time : ${time}
-┃🧬 Version : ${pkg.version}
-┃🛡️ Mode : ${config.MODE}
-╰━━━━━━━━━━━━━━━━━━⬣
-
-╭━━━〔 📂 COMMAND LIST 〕━━━⬣
-┃ Choose one item from below
-╰━━━━━━━━━━━━━━━━━━⬣
+📂 *Select a Category Below*
 `;
 
+  await sock.sendMessage(from, {
+    image: { url: headerImage },
+    caption: text
+  }, { quoted: m });
 
-// 🎁 Interactive Menu (example format used)
+  // interactive category buttons
+  const rows = categories.map(cat => ({
+    id: `cat_${cat}`,
+    title: cat,
+    description: `${commandMap[cat].length} commands`
+  }));
+
+  await sendInteractiveMessage(sock, from, {
+    text: "Choose Category",
+    interactiveButtons: [
+      {
+        name: "single_select",
+        buttonParamsJson: JSON.stringify({
+          title: "BOT MENU",
+          sections: [
+            {
+              title: "CATEGORIES",
+              rows: rows
+            }
+          ]
+        })
+      }
+    ]
+  });
+
+  pendingMenu[sender] = { commandMap };
+});
+
+
+// CATEGORY SELECT
+cmd({
+  filter: text => text.startsWith("cat_")
+}, async (sock, m, msg, { from, sender, body }) => {
+
+  if (!pendingMenu[sender]) return;
+
+  const category = body.replace("cat_", "");
+  const cmds = pendingMenu[sender].commandMap[category];
+
+  if (!cmds) return;
+
+  let text = `
+╭━━━〔 *${category} MENU* 〕━━━┈⊷
+`;
+
+  const rows = [];
+
+  cmds.forEach(command => {
+
+    const patterns = [command.pattern, ...(command.alias || [])]
+      .filter(Boolean)
+      .map(p => `${prefix}${p}`);
+
+    text += `┃ ${patterns.join(", ")}\n`;
+    text += `┃ ┗ ${command.desc || "No description"}\n`;
+
+    rows.push({
+      id: `cmd_${command.pattern}`,
+      title: `${prefix}${command.pattern}`,
+      description: command.desc || "Command"
+    });
+
+  });
+
+  text += `╰━━━━━━━━━━━━━━━┈⊷
+📦 Total Commands : ${cmds.length}
+`;
+
+  await sock.sendMessage(from, {
+    image: { url: headerImage },
+    caption: text
+  }, { quoted: m });
+
+  // interactive commands list
+  const prefix = "."; // 👈 prefix eka define karanna
+
 await sendInteractiveMessage(danuwa, from, {
   text: 'Choose one item',
   interactiveButtons: [
-    { name: 'single_select', buttonParamsJson: JSON.stringify({
+    {
+      name: 'single_select',
+      buttonParamsJson: JSON.stringify({
         title: 'Menu',
-        sections: [{
-          title: 'Main',
-          rows: [
-            { id: '.ping', title: '💐', description: 'First choice' },
-            { id: '.help', title: 'Second', description: 'Second choice' }
-          ]
-        }]
-    }) }
+        sections: [
+          {
+            title: 'Main',
+            rows: [
+              {
+                id: `${prefix}ping`, // 👈 me thanata prefix add kara
+                title: 'First',
+                description: 'First choice'
+              },
+              {
+                id: `${prefix}help`, // 👈 me thanatath
+                title: 'Second',
+                description: 'Second choice'
+              }
+            ]
+          }
+        ]
+      })
+    }
   ]
 });
-} catch (err) {
 
-console.log(err);
-
-reply("❌ Menu error");
-
-}
-
+  delete pendingMenu[sender];
 });
