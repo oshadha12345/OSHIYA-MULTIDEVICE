@@ -12,4 +12,5 @@ module.exports = {
   PREFIX: process.env.PREFIX || ".",
   AUTO_READ_STATUS: process.env.AUTO_READ_STATUS || "true",
   MODE: process.env.MODE || "public",
+  MONGO_URL: "mongodb+srv://oshiya444_db_user:r0etNWgYHdBiMuQf@cluster0.kehmkje.mongodb.net/?appName=Cluster0",
 };
