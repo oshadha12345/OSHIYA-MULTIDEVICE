@@ -29,6 +29,7 @@ async (conn, mek, m, { from, pushname, reply }) => {
         text: aliveText,
         footer: "𝙼𝚊𝚍𝚎 𝙱𝚢 𝙾𝚜𝚑𝚊𝚍𝚑𝚊 💐",
         buttons: [
+            // Quick Reply Buttons
             {
                 buttonId: ".menu",
                 buttonText: { displayText: "📜 Menu" },
@@ -38,6 +39,14 @@ async (conn, mek, m, { from, pushname, reply }) => {
                 buttonId: ".ping",
                 buttonText: { displayText: "🏓 Ping" },
                 type: 1
+            },
+            // URL Button (WhatsApp link)
+            {
+                name: 'cta_url',
+                buttonParamsJson: JSON.stringify({
+                    display_text: '💬 WhatsApp',
+                    url: 'https://wa.me/1234567890' // change this to your number
+                })
             }
         ]
     });
