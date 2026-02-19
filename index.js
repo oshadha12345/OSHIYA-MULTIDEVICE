@@ -11,70 +11,64 @@ const {
 const l = console.log;
 const {
   getBuffer,
-  getGroupAdmins
+  getGroupAdmins,
+  getRandom,
+  h2k,
+  isUrl,
+  Json,
+  runtime,
+  sleep,
+  fetchJson,
 } = require("./lib/functions");
-
 const fs = require("fs");
 const P = require("pino");
 const config = require("./config");
-const { sms } = require("./lib/msg");
+const qrcode = require("qrcode-terminal");
+const util = require("util");
+const { sms, downloadMediaMessage } = require("./lib/msg");
 const axios = require("axios");
+const { File } = require("megajs");
+const prefix = config.PREFIX;
+
+const ownerNumber = config.OWNER_NUM;
+
+//===================SESSION-AUTH============================
+if (!fs.existsSync(__dirname + "/auth_info_baileys/creds.json")) {
+  if (!config.SESSION_ID)
+    return console.log("Please add your session to SESSION_ID env !!");
+
+  // remove prefix "ᴏꜱʜɪʏᴀ~" automatically
+  let sessdata = config.SESSION_ID.startsWith("ᴏꜱʜɪʏᴀ~")
+    ? config.SESSION_ID.replace("ᴏꜱʜɪʏᴀ~", "")
+    : config.SESSION_ID;
+
+  const filer = File.fromURL(`https://mega.nz/file/${sessdata}`);
+
+  filer.download((err, data) => {
+    if (err) {
+      console.log("Session download error ❌", err);
+      return;
+    }
+
+    fs.writeFileSync(__dirname + "/auth_info_baileys/creds.json", data);
+    console.log("Session downloaded ✅");
+  });
+}
 
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 8000;
 
-const mongoose = require("mongoose");
+//=============================================
 
-const prefix = config.PREFIX;
-const ownerNumber = config.OWNER_NUM;
+async function connectToWA() {
+  //===========================
 
-///////////////////////////////////////////////////////
-// MongoDB Connect
-///////////////////////////////////////////////////////
-
-mongoose.connect(config.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-
-mongoose.connection.on("connected", () => {
-  console.log("MongoDB Connected ✅");
-});
-
-mongoose.connection.on("error", (err) => {
-  console.log("MongoDB Error ❌", err);
-});
-
-///////////////////////////////////////////////////////
-// Session Schema
-///////////////////////////////////////////////////////
-
-const sessionSchema = new mongoose.Schema({
-  sessionId: String
-});
-
-const Session = mongoose.model("Session", sessionSchema);
-
-///////////////////////////////////////////////////////
-// Connect Function
-///////////////////////////////////////////////////////
-
-async function connectToWA(sessionId) {
-
-  console.log(`Connecting Session: ${sessionId}`);
-
-  const sessionPath = `./auth_info_baileys/${sessionId}`;
-
-  if (!fs.existsSync(sessionPath)) {
-    fs.mkdirSync(sessionPath, { recursive: true });
-  }
-
-  const { state, saveCreds } =
-    await useMultiFileAuthState(sessionPath);
-
-  const { version } =
-    await fetchLatestBaileysVersion();
+  console.log("Connecting ✅ OSHIYA-MD");
+  const { state, saveCreds } = await useMultiFileAuthState(
+    __dirname + "/auth_info_baileys/"
+  );
+  var { version } = await fetchLatestBaileysVersion();
 
   const robin = makeWASocket({
     logger: P({ level: "silent" }),
@@ -85,219 +79,342 @@ async function connectToWA(sessionId) {
     version,
   });
 
-  ///////////////////////////////////////////////////////
-  // Connection Update
-  ///////////////////////////////////////////////////////
-
   robin.ev.on("connection.update", (update) => {
-
     const { connection, lastDisconnect } = update;
-
     if (connection === "close") {
-
-      const status =
-        lastDisconnect?.error?.output?.statusCode;
-
-      if (status !== DisconnectReason.loggedOut) {
-        connectToWA(sessionId);
+      if (
+        lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut
+      ) {
+        connectToWA();
       }
-
     } else if (connection === "open") {
-
-      console.log(`Session Connected ✅ ${sessionId}`);
-
+      console.log(" Installing... ");
       const path = require("path");
-
       fs.readdirSync("./plugins/").forEach((plugin) => {
         if (path.extname(plugin).toLowerCase() == ".js") {
           require("./plugins/" + plugin);
         }
       });
+      console.log("✅ OSHIYA-MD installed successful ✅");
+      console.log("✅ OSHIYA-MD connected to whatsapp ✅");  
+      let up = `👨‍💻 *OSHIYA-MD MULTIDEVICE BOT* 👨‍💻\n🛡️ 𝐁𝐨𝐭 𝐂𝐨𝐧𝐧𝐞𝐜𝐭𝐞𝐝 𝐬𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲\n🛡️ 𝐔𝐬𝐞 𝐌𝐞𝐧𝐮 𝐀𝐧𝐝 𝐎𝐭𝐡𝐞𝐫 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬 🛡️\n🧬 𝚆𝚊𝚒𝚝 5 𝚖𝚒𝚗𝚞𝚝𝚎𝚜 𝚏𝚘𝚛 𝚒𝚝 𝚝𝚘 𝚠𝚘𝚛𝚔 𝚝𝚘 𝚑𝚒𝚐𝚑𝚝 𝚜𝚙𝚎𝚎𝚍 🧬\n> *@Oshiya Official* 👑`;
+      let up1 = `╭───────❖🌀❖───────╮
+   ✨  *I MADE OSHIYA MD*  ✨
 
-      console.log("Plugins Installed ✅");
+🤖  *SUPER SPEED BOT*  🔥  
+⚡*BEST MULTI-DEVICE WA BOT*  
 
-      robin.sendMessage(
-        ownerNumber + "@s.whatsapp.net",
-        {
-          text:
-            "✅ OSHIYA-MD Connected\nSession: " + sessionId
-        }
-      );
+🌟  *THAK YOU*  🌟  
+       🎭*-OSHADHA-*🎭
+
+╰───────❖🌀❖───────╯`;
+
+      robin.sendMessage(ownerNumber + "@s.whatsapp.net", {
+        image: {
+          url: `https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/20251223_061012.jpg`,
+        },
+        caption: up,
+      });
+      robin.sendMessage("94725364886@s.whatsapp.net", {
+        image: {
+          url: `https://raw.githubusercontent.com/oshadha12345/images/refs/heads/main/oshiyaping.jpg`,
+        },
+        caption: up1,
+      });
     }
-
   });
-
-  ///////////////////////////////////////////////////////
-  // Save Creds
-  ///////////////////////////////////////////////////////
-
   robin.ev.on("creds.update", saveCreds);
-
-  ///////////////////////////////////////////////////////
-  // Messages
-  ///////////////////////////////////////////////////////
-
   robin.ev.on("messages.upsert", async (mek) => {
-
     mek = mek.messages[0];
-
     if (!mek.message) return;
-
     mek.message =
       getContentType(mek.message) === "ephemeralMessage"
         ? mek.message.ephemeralMessage.message
         : mek.message;
-
+    if (
+      mek.key &&
+      mek.key.remoteJid === "status@broadcast" &&
+      config.AUTO_READ_STATUS === "true"
+      ) {
+      await robin.readMessage([mek.key]);
+    } 
+      
     const m = sms(robin, mek);
-
-    const type =
-      getContentType(mek.message);
-
-    const from =
-      mek.key.remoteJid;
-
+    const type = getContentType(mek.message);
+    const content = JSON.stringify(mek.message);
+    const from = mek.key.remoteJid;
+    const quoted =
+      type == "extendedTextMessage" &&
+      mek.message.extendedTextMessage.contextInfo != null
+        ? mek.message.extendedTextMessage.contextInfo.quotedMessage || []
+        : [];
     const body =
       type === "conversation"
         ? mek.message.conversation
         : type === "extendedTextMessage"
         ? mek.message.extendedTextMessage.text
-        : type === "imageMessage"
+        : type == "imageMessage" && mek.message.imageMessage.caption
         ? mek.message.imageMessage.caption
-        : type === "videoMessage"
+        : type == "videoMessage" && mek.message.videoMessage.caption
         ? mek.message.videoMessage.caption
         : "";
+    const isCmd = body.startsWith(prefix);
+    const command = isCmd
+      ? body.slice(prefix.length).trim().split(" ").shift().toLowerCase()
+      : "";
+    const args = body.trim().split(/ +/).slice(1);
+    const q = args.join(" ");
+    const isGroup = from.endsWith("@g.us");
+    const sender = mek.key.fromMe
+      ? robin.user.id.split(":")[0] + "@s.whatsapp.net" || robin.user.id
+      : mek.key.participant || mek.key.remoteJid;
+    const senderNumber = sender.split("@")[0];
+    const botNumber = robin.user.id.split(":")[0];
+    const pushname = mek.pushName || "Sin Nombre";
+    const isMe = botNumber.includes(senderNumber);
+    const isOwner = ownerNumber.includes(senderNumber) || isMe;
+    const botNumber2 = await jidNormalizedUser(robin.user.id);
+    const groupMetadata = isGroup
+      ? await robin.groupMetadata(from).catch((e) => {})
+      : "";
+    const groupName = isGroup ? groupMetadata.subject : "";
+    const participants = isGroup ? await groupMetadata.participants : "";
+    const groupAdmins = isGroup ? await getGroupAdmins(participants) : "";
+    const isBotAdmins = isGroup ? groupAdmins.includes(botNumber2) : false;
+    const isAdmins = isGroup ? groupAdmins.includes(sender) : false;
+    const isReact = m.message.reactionMessage ? true : false;
+    const reply = (teks) => {
+      robin.sendMessage(from, { text: teks }, { quoted: mek });
+    };
 
-    const isCmd =
-      body.startsWith(prefix);
-
-    const command =
-      isCmd
-        ? body.slice(prefix.length)
-            .trim()
-            .split(" ")
-            .shift()
-            .toLowerCase()
-        : "";
-
-    const args =
-      body.trim().split(/ +/).slice(1);
-
-    const isGroup =
-      from.endsWith("@g.us");
-
-    const sender =
-      mek.key.fromMe
-        ? robin.user.id.split(":")[0] +
-          "@s.whatsapp.net"
-        : mek.key.participant ||
-          mek.key.remoteJid;
-
-    const senderNumber =
-      sender.split("@")[0];
-
-    const botNumber =
-      robin.user.id.split(":")[0];
-
-    const isOwner =
-      ownerNumber.includes(senderNumber);
-
-    const reply = (text) =>
-      robin.sendMessage(
-        from,
-        { text },
-        { quoted: mek }
-      );
-
-    ///////////////////////////////////////////////////////
-    // MODE FILTER
-    ///////////////////////////////////////////////////////
-
-    if (!isOwner && config.MODE === "private")
-      return;
-
-    ///////////////////////////////////////////////////////
-    // COMMAND HANDLER
-    ///////////////////////////////////////////////////////
-
-    const events =
-      require("./command");
-
-    if (isCmd) {
-
-      const cmd =
-        events.commands.find(
-          (c) => c.pattern === command
+    robin.sendFileUrl = async (jid, url, caption, quoted, options = {}) => {
+      let mime = "";
+      let res = await axios.head(url);
+      mime = res.headers["content-type"];
+      if (mime.split("/")[1] === "gif") {
+        return robin.sendMessage(
+          jid,
+          {
+            video: await getBuffer(url),
+            caption: caption,
+            gifPlayback: true,
+            ...options,
+          },
+          { quoted: quoted, ...options }
         );
+      }
+      let type = mime.split("/")[0] + "Message";
+      if (mime === "application/pdf") {
+        return robin.sendMessage(
+          jid,
+          {
+            document: await getBuffer(url),
+            mimetype: "application/pdf",
+            caption: caption,
+            ...options,
+          },
+          { quoted: quoted, ...options }
+        );
+      }
+      if (mime.split("/")[0] === "image") {
+        return robin.sendMessage(
+          jid,
+          { image: await getBuffer(url), caption: caption, ...options },
+          { quoted: quoted, ...options }
+        );
+      }
+      if (mime.split("/")[0] === "video") {
+        return robin.sendMessage(
+          jid,
+          {
+            video: await getBuffer(url),
+            caption: caption,
+            mimetype: "video/mp4",
+            ...options,
+          },
+          { quoted: quoted, ...options }
+        );
+      }
+      if (mime.split("/")[0] === "audio") {
+        return robin.sendMessage(
+          jid,
+          {
+            audio: await getBuffer(url),
+            caption: caption,
+            mimetype: "audio/mpeg",
+            ...options,
+          },
+          { quoted: quoted, ...options }
+        );
+      }
+    };
+  
+    //work type
+    if (!isOwner && config.MODE === "private") return;
+    if (!isOwner && isGroup && config.MODE === "inbox") return;
+    if (!isOwner && !isGroup && config.MODE === "groups") return;
 
+    const events = require("./command");
+    const cmdName = isCmd
+      ? body.slice(1).trim().split(" ")[0].toLowerCase()
+      : false;
+    if (isCmd) {
+      const cmd =
+        events.commands.find((cmd) => cmd.pattern === cmdName) ||
+        events.commands.find((cmd) => cmd.alias && cmd.alias.includes(cmdName));
       if (cmd) {
+        if (cmd.react)
+          robin.sendMessage(from, { react: { text: cmd.react, key: mek.key } });
 
         try {
-
           cmd.function(robin, mek, m, {
             from,
+            quoted,
+            body,
+            isCmd,
+            command,
             args,
-            reply,
+            q,
+            isGroup,
+            sender,
+            senderNumber,
+            botNumber2,
+            botNumber,
+            pushname,
+            isMe,
             isOwner,
-            senderNumber
+            groupMetadata,
+            groupName,
+            participants,
+            groupAdmins,
+            isBotAdmins,
+            isAdmins,
+            reply,
           });
-
         } catch (e) {
-          console.log(e);
+          console.error("[PLUGIN ERROR] " + e);
         }
-
       }
-
     }
-
+    events.commands.map(async (command) => {
+      if (body && command.on === "body") {
+        command.function(robin, mek, m, {
+          from,
+          l,
+          quoted,
+          body,
+          isCmd,
+          command,
+          args,
+          q,
+          isGroup,
+          sender,
+          senderNumber,
+          botNumber2,
+          botNumber,
+          pushname,
+          isMe,
+          isOwner,
+          groupMetadata,
+          groupName,
+          participants,
+          groupAdmins,
+          isBotAdmins,
+          isAdmins,
+          reply,
+        });
+      } else if (mek.q && command.on === "text") {
+        command.function(robin, mek, m, {
+          from,
+          l,
+          quoted,
+          body,
+          isCmd,
+          command,
+          args,
+          q,
+          isGroup,
+          sender,
+          senderNumber,
+          botNumber2,
+          botNumber,
+          pushname,
+          isMe,
+          isOwner,
+          groupMetadata,
+          groupName,
+          participants,
+          groupAdmins,
+          isBotAdmins,
+          isAdmins,
+          reply,
+        });
+      } else if (
+        (command.on === "image" || command.on === "photo") &&
+        mek.type === "imageMessage"
+      ) {
+        command.function(robin, mek, m, {
+          from,
+          l,
+          quoted,
+          body,
+          isCmd,
+          command,
+          args,
+          q,
+          isGroup,
+          sender,
+          senderNumber,
+          botNumber2,
+          botNumber,
+          pushname,
+          isMe,
+          isOwner,
+          groupMetadata,
+          groupName,
+          participants,
+          groupAdmins,
+          isBotAdmins,
+          isAdmins,
+          reply,
+        });
+      } else if (command.on === "sticker" && mek.type === "stickerMessage") {
+        command.function(robin, mek, m, {
+          from,
+          l,
+          quoted,
+          body,
+          isCmd,
+          command,
+          args,
+          q,
+          isGroup,
+          sender,
+          senderNumber,
+          botNumber2,
+          botNumber,
+          pushname,
+          isMe,
+          isOwner,
+          groupMetadata,
+          groupName,
+          participants,
+          groupAdmins,
+          isBotAdmins,
+          isAdmins,
+          reply,
+        });
+      }
+    });
+    //============================================================================
   });
-
 }
-
-///////////////////////////////////////////////////////
-// Start All Sessions from MongoDB
-///////////////////////////////////////////////////////
-
-async function startSessions() {
-
-  const sessions =
-    await Session.find();
-
-  if (!sessions.length) {
-
-    console.log("No Sessions Found ❌");
-
-    return;
-
-  }
-
-  sessions.forEach((sess) => {
-
-    connectToWA(sess.sessionId);
-
-  });
-
-}
-
-///////////////////////////////////////////////////////
-// Express Server
-///////////////////////////////////////////////////////
-
 app.get("/", (req, res) => {
-  res.send("OSHIYA-MD MongoDB Version Running ✅");
+  res.send("hey, 🎭 OSHIYA-MD started✅");
 });
-
 app.listen(port, () =>
-  console.log(
-    "Server running on port " + port
-  )
+  console.log(`Server listening on port http://localhost:${port}`)
 );
-
-///////////////////////////////////////////////////////
-// Start Bot
-///////////////////////////////////////////////////////
-
 setTimeout(() => {
-
-  startSessions();
-
+  connectToWA();
 }, 4000);
