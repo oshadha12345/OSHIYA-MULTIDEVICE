@@ -20,6 +20,7 @@
     "axios": "^1.6.8",
     "browser-id3-writer": "^6.3.1",
     "cheerio": "^1.1.2",
+    "gifted-baileys": "^2.0.6",
     "dotenv": "^17.2.3",
     "express": "^4.19.2",
     "moment-timezone": "^0.6.0",
